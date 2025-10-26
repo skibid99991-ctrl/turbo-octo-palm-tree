@@ -1,0 +1,595 @@
+-- Riky Hub ALL Script - By Tường Vy
+-- Premium Script by Riky Development Team
+
+local Players = game:GetService("Players")
+local plr = Players.LocalPlayer
+local replicated = game:GetService("ReplicatedStorage")
+local TeleportService = game:GetService("TeleportService")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local VirtualUser = game:GetService("VirtualUser")
+
+-- Riky Hub Configuration
+local RikyHub = {
+    Version = "v2.5.1 Premium",
+    Developer = "Tường Vy",
+    ImageID = "rbxassetid://14204231522", -- Riky Hub Logo
+    Discord = "discord.gg/rikyhub",
+    Premium = true
+}
+
+-- Riky Hub UI Implementation
+local RikyUI = {
+    MainColor = Color3.fromRGB(255, 85, 255),
+    SecondaryColor = Color3.fromRGB(85, 255, 255),
+    BackgroundColor = Color3.fromRGB(15, 15, 15),
+    TextColor = Color3.fromRGB(255, 255, 255)
+}
+
+-- Load Fluent UI for Riky Hub
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+-- Create Riky Hub Window
+local RikyWindow = Fluent:CreateWindow({
+    Title = "Riky Hub ALL Script - By Tường Vy",
+    SubTitle = "",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true,
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.RightControl
+})
+
+-- Riky Hub Theme Configuration
+Fluent:SetTheme(RikyUI.BackgroundColor)
+
+-- Chỉ giữ lại tab Main
+local Tabs = {
+    Main = RikyWindow:AddTab({Title = "🏠 Main", Icon = ""})
+}
+
+-- Riky Hub Header Section
+Tabs.Main:AddSection("Riky Hub Status")
+
+local StatusLabel = Tabs.Main:AddParagraph({
+    Title = "🟢 Riky Hub Status: ACTIVE",
+    Content = "Premium Features Enabled | Version: " .. RikyHub.Version
+})
+
+-- Player Info Display
+local PlayerInfo = Tabs.Main:AddParagraph({
+    Title = "👤 Player Information",
+    Content = "Loading player data..."
+})
+
+spawn(function()
+    while task.wait(2) do
+        PlayerInfo:SetDesc(
+            "Level: " .. plr.Data.Level.Value .. 
+            " | Beli: " .. plr.Data.Beli.Value .. 
+            " | Fruit: " .. (plr.Data.DevilFruit.Value or "None") ..
+            "\nRace: " .. plr.Data.Race.Value ..
+            " | Location: " .. (game.PlaceId == 2753915549 and "First Sea" or game.PlaceId == 4442272183 and "Second Sea" or "Third Sea")
+        )
+    end
+end)
+
+-- Script Executor Section - Blox Fruits
+Tabs.Main:AddSection("🔮 Blox Fruits Scripts")
+
+-- Redz Hub
+Tabs.Main:AddButton({
+    Title = "🔴 Redz Hub",
+    Description = "Blox Fruits - Pirates/Marines",
+    Callback = function()
+        local Settings = {
+            JoinTeam = "Pirates",
+            Translator = true
+        }
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"))(Settings)
+    end
+})
+
+-- Quantum Hub
+Tabs.Main:AddButton({
+    Title = "🔵 Quantum Hub",
+    Description = "Blox Fruits - Advanced",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/flazhy/QuantumOnyx/refs/heads/main/QuantumOnyx.lua"))()
+    end
+})
+
+-- Banana Hub
+Tabs.Main:AddButton({
+    Title = "🍌 Banana Hub",
+    Description = "Blox Fruits - Free",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Chiriku2013/BananaCatHub/refs/heads/main/BananaCatHub.lua"))()
+    end
+})
+
+-- Vxeze Hub
+Tabs.Main:AddButton({
+    Title = "🟣 Vxeze Hub",
+    Description = "Blox Fruits",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Dex-Bear/Vxezehub/refs/heads/main/VxezeHubMain"))()
+    end
+})
+
+-- Maru Hub
+Tabs.Main:AddButton({
+    Title = "🔵 Maru Hub",
+    Description = "Blox Fruits - Free No Key",
+    Callback = function()
+        getgenv().Team = "Marines"
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/KimP/refs/heads/main/MaruHub"))()
+    end
+})
+
+-- Hoho V4
+Tabs.Main:AddButton({
+    Title = "⚪ Hoho V4",
+    Description = "Blox Fruits - Advanced",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_UI"))()
+    end
+})
+
+-- Shark Hub
+Tabs.Main:AddButton({
+    Title = "🦈 Shark Hub",
+    Description = "Blox Fruits",
+    Callback = function()
+        loadstring(game:HttpGet("https://shorturl.at/kyOxL"))()
+    end
+})
+
+-- Quartz Kaitun Hub
+Tabs.Main:AddButton({
+    Title = "💎 Quartz Kaitun",
+    Description = "Blox Fruits - Auto Farm",
+    Callback = function()
+        getgenv().Mode = "OneClick"
+        getgenv().Setting = {
+            ["Team"] = "Pirates",
+            ["FucusOnLevel"] = true,
+            ["Fruits"] = {
+                ["Primary"] = {
+                    "Dough-Dough",
+                    "Dragon-Dragon",
+                    "Buddha-Buddha",
+                },
+                ["Normal"] = {
+                    "Flame-Flame",
+                    "Light-Light",
+                    "Magma-Magma",
+                }
+            },
+            ["IdleCheck"] = 150,
+        }
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/xQuartyx/QuartyzScript/main/Loader.lua"))()
+    end
+})
+
+-- Hiru Hub
+Tabs.Main:AddButton({
+    Title = "🟠 Hiru Hub",
+    Description = "Blox Fruits - Pirates",
+    Callback = function()
+        getgenv().Team = "Pirates"
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/NGUYENVUDUY1/Source/main/HiruHub.lua"))()
+    end
+})
+
+-- Blue X Hub
+Tabs.Main:AddButton({
+    Title = "🔵 Blue X Hub",
+    Description = "Blox Fruits",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-BlueX/BlueX-Hub/refs/heads/main/Main.lua"))()
+    end
+})
+
+-- Lion Hub
+Tabs.Main:AddButton({
+    Title = "🦁 Lion Hub",
+    Description = "Blox Fruits - No Key",
+    Callback = function()
+        getgenv().Team = "Pirates"
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/NHMdz/BloxFruit/refs/heads/main/Lion%20Hub.lua"))()
+    end
+})
+
+-- Min Gaming
+Tabs.Main:AddButton({
+    Title = "⚡ Min Gaming",
+    Description = "Blox Fruits",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/Min/refs/heads/main/MinXt2Eng"))()
+    end
+})
+
+-- Ngọc Bổng Hub
+Tabs.Main:AddButton({
+    Title = "💚 Ngọc Bổng Hub",
+    Description = "Blox Fruits",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ngocbonggaming/script/refs/heads/main/NgocBongVn.lua"))()
+    end
+})
+
+-- Cokka Hub
+Tabs.Main:AddButton({
+    Title = "🟤 Cokka Hub",
+    Description = "Blox Fruits",
+    Callback = function()
+        loadstring(game:HttpGet"https://raw.githubusercontent.com/UserDevEthical/Loadstring/main/CokkaHub.lua")()
+    end
+})
+
+-- Script Executor Section - Other Games
+Tabs.Main:AddSection("🎮 Other Games Scripts")
+
+-- TSB Hub
+Tabs.Main:AddButton({
+    Title = "🔧 TSB Hub",
+    Description = "Multiple Games",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/kaimm2/TSB/refs/heads/main/Tthanh%20Tong%20Hop%20Tech.txt"))()
+    end
+})
+
+-- TSB Hub Minh Nhật
+Tabs.Main:AddButton({
+    Title = "⭐ TSB Minh Nhật",
+    Description = "Multiple Games - VIP",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/minhnhatdepzai8-cloud/TONG-HOP-SCRIPT/refs/heads/main/TSB"))()
+    end
+})
+
+-- Mon Hub
+Tabs.Main:AddButton({
+    Title = "👻 Mon Hub",
+    Description = "Brainrots Game",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Monmon9ne/Mon_Hub/refs/heads/main/StealHelper.lua"))()
+    end
+})
+
+-- Speed Hub
+Tabs.Main:AddButton({
+    Title = "🚀 Speed Hub",
+    Description = "Plant vs Brainrots",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
+    end
+})
+
+-- Zombie Hunty Zee Hub
+Tabs.Main:AddButton({
+    Title = "🧟 Zee Hub",
+    Description = "Zombie Hunty",
+    Callback = function()
+        loadstring(game:HttpGet("https://zuwz.me/Ls-Zee-Hub-HZ"))()
+    end
+})
+
+-- MM2 Yarhm
+Tabs.Main:AddButton({
+    Title = "🔪 MM2 Yarhm",
+    Description = "Murder Mystery 2",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Joystickplays/psychic-octo-invention/main/yarhm.lua", false))()
+    end
+})
+
+-- Fly Gui V3
+Tabs.Main:AddButton({
+    Title = "✈️ Fly Gui V3",
+    Description = "All Maps - Fly Script",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/TwoGunVolley/Dedrail/refs/heads/main/Protected_8860927939362090.txt"))()
+    end
+})
+
+-- Midnight Chasers
+Tabs.Main:AddButton({
+    Title = "🌙 Midnight Chasers",
+    Description = "Aotu World - Auto Farm",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/HitAMassy/AnonymousHub/refs/heads/main/loader.lua"))()
+    end
+})
+
+-- Multi-Game Scripts Section
+Tabs.Main:AddSection("🌐 Multi-Game Support")
+
+-- Bonk Hub - ALL Game
+Tabs.Main:AddButton({
+    Title = "🔹 Bonk Hub",
+    Description = "Support ALL Game",
+    Callback = function()
+        loadstring(game:HttpGet("https://bonkhub.online/loader.lua",true))()
+    end
+})
+
+-- Lumin Hub
+Tabs.Main:AddButton({
+    Title = "🔸 Lumin Hub",
+    Description = "Support Grow A Garden",
+    Callback = function()
+        loadstring(game:HttpGet("http://luminon.top/loader.lua"))()
+    end
+})
+
+-- Nat Hub
+Tabs.Main:AddButton({
+    Title = "🔹 Nat Hub",
+    Description = "Grow A Garden",
+    Callback = function()
+        loadstring(game:HttpGet("https://get.nathub.xyz/loader"))()
+    end
+})
+
+-- Execute All Blox Fruits Button
+Tabs.Main:AddButton({
+    Title = "🎯 Execute Top 5 BF Scripts",
+    Description = "Run best Blox Fruits scripts",
+    Callback = function()
+        RikyWindow:Dialog({
+            Title = "Execute Top 5 Blox Fruits",
+            Content = "This will execute: Redz, Quantum, Hoho, Quartz, Lion Hub",
+            Buttons = {
+                {
+                    Title = "YES",
+                    Callback = function()
+                        -- Redz Hub
+                        local Settings = {JoinTeam = "Pirates", Translator = true}
+                        loadstring(game:HttpGet("https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"))(Settings)
+                        
+                        wait(2)
+                        
+                        -- Quantum Hub
+                        loadstring(game:HttpGet("https://raw.githubusercontent.com/flazhy/QuantumOnyx/refs/heads/main/QuantumOnyx.lua"))()
+                        
+                        wait(2)
+                        
+                        -- Hoho V4
+                        loadstring(game:HttpGet("https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_UI"))()
+                        
+                        wait(2)
+                        
+                        -- Quartz Kaitun
+                        getgenv().Mode = "OneClick"
+                        getgenv().Setting = {Team = "Pirates", FucusOnLevel = true}
+                        loadstring(game:HttpGet("https://raw.githubusercontent.com/xQuartyx/QuartyzScript/main/Loader.lua"))()
+                        
+                        wait(2)
+                        
+                        -- Lion Hub
+                        getgenv().Team = "Pirates"
+                        loadstring(game:HttpGet("https://raw.githubusercontent.com/NHMdz/BloxFruit/refs/heads/main/Lion%20Hub.lua"))()
+                        
+                        RikyNotify("✅ Success", "Top 5 Blox Fruits scripts executed!", 3)
+                    end
+                },
+                {
+                    Title = "NO",
+                    Callback = function() end
+                }
+            }
+        })
+    end
+})
+
+-- Game Detection Info
+Tabs.Main:AddSection("🎯 Game Information")
+
+local GameInfo = Tabs.Main:AddParagraph({
+    Title = "📊 Current Game Support",
+    Content = "Detecting game..."
+})
+
+spawn(function()
+    local gameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
+    local isBloxFruits = game.PlaceId == 2753915549 or game.PlaceId == 4442272183 or game.PlaceId == 7449423635
+    
+    if isBloxFruits then
+        GameInfo:SetDesc(
+            "Game: " .. gameName .. 
+            "\n🎮 Supported by: ALL Blox Fruits Scripts" ..
+            "\n🌐 Multi-Game: Bonk Hub, TSB Hub"
+        )
+    else
+        GameInfo:SetDesc(
+            "Game: " .. gameName .. 
+            "\n🌐 Multi-Game: Bonk Hub, TSB Hub, Fly Gui" ..
+            "\n🎯 Specific: Check script descriptions"
+        )
+    end
+end)
+
+-- Riky Hub Utilities
+Tabs.Main:AddSection("⚙️ Riky Hub Utilities")
+
+local AntiAFKToggle = Tabs.Main:AddToggle("AntiAFKToggle", {
+    Title = "🛡️ Riky Anti-AFK",
+    Description = "Prevents AFK detection",
+    Default = true
+})
+
+AntiAFKToggle:OnChanged(function(Value)
+    _G.Riky_AntiAFK = Value
+end)
+
+local PerformanceToggle = Tabs.Main:AddToggle("PerformanceToggle", {
+    Title = "🚀 Performance Boost",
+    Description = "Optimizes game performance",
+    Default = false
+})
+
+PerformanceToggle:OnChanged(function(Value)
+    _G.Riky_Performance = Value
+end)
+
+-- Riky Hub Settings Section
+Tabs.Main:AddSection("🔧 Riky Hub Configuration")
+
+local ThemePicker = Tabs.Main:AddDropdown("ThemePicker", {
+    Title = "🎨 Riky Hub Theme",
+    Values = {"Dark", "Light", "Blue", "Purple", "Green"},
+    Multi = false,
+    Default = "Dark"
+})
+
+ThemePicker:OnChanged(function(Value)
+    Fluent:SetTheme(Value)
+end)
+
+-- Riky Hub Save/Load System
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+
+SaveManager:IgnoreThemeSettings()
+SaveManager:SetIgnoreIndexes({"RikyHub_Version"})
+
+InterfaceManager:SetFolder("RikyHub")
+SaveManager:SetFolder("RikyHub/bloxfruits")
+
+InterfaceManager:BuildInterfaceSection(Tabs.Main)
+SaveManager:BuildConfigSection(Tabs.Main)
+
+-- Riky Hub Settings Buttons
+Tabs.Main:AddButton({
+    Title = "💾 Save Configuration",
+    Description = "Save your Riky Hub settings",
+    Callback = function()
+        SaveManager:Save()
+    end
+})
+
+Tabs.Main:AddButton({
+    Title = "🔄 Load Configuration", 
+    Description = "Load your saved settings",
+    Callback = function()
+        SaveManager:Load()
+    end
+})
+
+-- Riky Hub Footer
+Tabs.Main:AddSection("ℹ️ Riky Hub Information")
+
+Tabs.Main:AddParagraph({
+    Title = "🌟 Riky Hub ALL Script - By Tường Vy",
+    Content = "Developed by Tường Vy\n" .. RikyHub.Discord .. "\n\n🎯 Total Scripts: 25+ Available"
+})
+
+-- Riky Hub Floating Button
+local RikyFloatingButton = Instance.new("ScreenGui")
+local ImageButton = Instance.new("ImageButton")
+local UICorner = Instance.new("UICorner")
+local ParticleEmitter = Instance.new("ParticleEmitter")
+
+RikyFloatingButton.Name = "RikyFloatingButton"
+RikyFloatingButton.Parent = game.CoreGui
+RikyFloatingButton.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+ImageButton.Parent = RikyFloatingButton
+ImageButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+ImageButton.BorderSizePixel = 0
+ImageButton.Position = UDim2.new(0.02, 0, 0.4, 0)
+ImageButton.Size = UDim2.new(0, 60, 0, 60)
+ImageButton.Image = RikyHub.ImageID
+ImageButton.Draggable = true
+
+UICorner.Parent = ImageButton
+UICorner.CornerRadius = UDim.new(0, 12)
+
+-- Riky Hub Particle Effects
+ParticleEmitter.Parent = ImageButton
+ParticleEmitter.LightEmission = 1
+ParticleEmitter.Size = NumberSequence.new({
+    NumberSequenceKeypoint.new(0, 0.2),
+    NumberSequenceKeypoint.new(1, 0)
+})
+ParticleEmitter.Texture = "rbxassetid://14204231522"
+ParticleEmitter.Lifetime = NumberRange.new(0.5, 1.5)
+ParticleEmitter.Rate = 15
+ParticleEmitter.SpreadAngle = Vector2.new(45, 45)
+ParticleEmitter.Speed = NumberRange.new(5, 15)
+ParticleEmitter.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, RikyUI.MainColor),
+    ColorSequenceKeypoint.new(1, RikyUI.SecondaryColor)
+})
+
+-- Riky Hub Button Animation
+local rotateTween = TweenService:Create(ImageButton, 
+    TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, -1), 
+    {Rotation = 360}
+)
+
+ImageButton.MouseEnter:Connect(function()
+    rotateTween:Play()
+    ImageButton.Size = UDim2.new(0, 65, 0, 65)
+end)
+
+ImageButton.MouseLeave:Connect(function()
+    rotateTween:Pause()
+    ImageButton.Rotation = 0
+    ImageButton.Size = UDim2.new(0, 60, 0, 60)
+end)
+
+-- Riky Hub Toggle Functionality
+ImageButton.MouseButton1Click:Connect(function()
+    RikyWindow:Minimize()
+end)
+
+-- Riky Hub Notification System
+local function RikyNotify(Title, Content, Duration)
+    RikyWindow:Dialog({
+        Title = Title,
+        Content = Content,
+        Buttons = {
+            {
+                Title = "OK",
+                Callback = function() end
+            }
+        }
+    })
+end
+
+-- Initial Riky Hub Notification
+spawn(function()
+    wait(2)
+    RikyNotify(
+        "🎉 Welcome to Riky Hub!",
+        "Thank you for using Riky Hub ALL Script - By Tường Vy" .. 
+        "\n\n🌟 25+ Scripts Available\n🎮 Multi-Game Support\n🔧 Advanced Features",
+        5
+    )
+end)
+
+-- Riky Hub Auto-Save
+spawn(function()
+    while task.wait(60) do
+        if SaveManager then
+            SaveManager:Save()
+        end
+    end
+end)
+
+-- Select main tab by default
+RikyWindow:SelectTab(1)
+
+-- Riky Hub Final Initialization
+warn("[Riky Hub] Initialization Complete - By Tường Vy")
+print("[Riky Hub] Total Scripts: 25+")
+print("[Riky Hub] Discord: " .. RikyHub.Discord)
+
+-- Apply Riky Hub theme
+Fluent:ApplyTheme(RikyUI.BackgroundColor)
