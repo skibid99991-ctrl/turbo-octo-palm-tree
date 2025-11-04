@@ -1,0 +1,526 @@
+-- Riky Hub Premium V1.4
+-- Premium Script by Riky Development Team
+
+local Players = game:GetService("Players")
+local plr = Players.LocalPlayer
+local TweenService = game:GetService("TweenService")
+local VirtualUser = game:GetService("VirtualUser")
+
+-- Riky Hub Premium Configuration
+local RikyHub = {
+    Version = "V1.4 Premium",
+    Developer = "Riky Development Team",
+    ImageID = "rbxassetid://117201145293290",
+    Discord = "discord.gg/rikyhub",
+    Premium = true
+}
+
+-- Load Fluent UI for Riky Hub
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+-- Create Riky Hub Window
+local RikyWindow = Fluent:CreateWindow({
+    Title = "Riky Hub Premium V1.4",
+    SubTitle = "by Riky Development Team",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(450, 400),
+    Acrylic = true,
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.RightControl
+})
+
+-- Tabs
+local Tabs = {
+    Main = RikyWindow:AddTab({Title = "Main", Icon = ""}),
+    Lobby = RikyWindow:AddTab({Title = "Lobby", Icon = ""}),
+    Weapons = RikyWindow:AddTab({Title = "Weapons", Icon = ""}),
+    Combat = RikyWindow:AddTab({Title = "Combat", Icon = ""}),
+    Skills = RikyWindow:AddTab({Title = "Skills", Icon = ""}),
+    Misc = RikyWindow:AddTab({Title = "Misc", Icon = ""})
+}
+
+-- Riky Hub Status
+Tabs.Main:AddSection("STATUS")
+
+local PremiumStatus = Tabs.Main:AddParagraph({
+    Title = "RIKY HUB: ACTIVE",
+    Content = "Version: " .. RikyHub.Version
+})
+
+-- Utilities
+Tabs.Main:AddSection("UTILITIES")
+
+local AntiAFKToggle = Tabs.Main:AddToggle("AntiAFKToggle", {
+    Title = "Anti-AFK",
+    Description = "",
+    Default = true
+})
+
+AntiAFKToggle:OnChanged(function(Value)
+    if Value then
+        plr.Idled:Connect(function()
+            VirtualUser:CaptureController()
+            VirtualUser:ClickButton2(Vector2.new())
+        end)
+    end
+end)
+
+-- TAB 1: MAIN - AUTO FEATURES
+Tabs.Main:AddSection("AUTO FARM")
+
+local AutoFarmMob = Tabs.Main:AddToggle("AutoFarmMob", {
+    Title = "Farm Mob (Zombie/Boss)",
+    Description = "",
+    Default = false
+})
+
+local AutoCollectDrop = Tabs.Main:AddToggle("AutoCollectDrop", {
+    Title = "Collect Dropitem",
+    Description = "",
+    Default = false
+})
+
+local AutoEscapeBoss = Tabs.Main:AddToggle("AutoEscapeBoss", {
+    Title = "Escape Boss Skill",
+    Description = "",
+    Default = false
+})
+
+local AutoDameAura = Tabs.Main:AddToggle("AutoDameAura", {
+    Title = "Damage Aura",
+    Description = "",
+    Default = false
+})
+
+local AutoReplay = Tabs.Main:AddToggle("AutoReplay", {
+    Title = "Auto Replay",
+    Description = "",
+    Default = false
+})
+
+local TpToLobby = Tabs.Main:AddToggle("TpToLobby", {
+    Title = "Tp To Lobby (Bug)",
+    Description = "",
+    Default = false
+})
+
+-- TAB 2: LOBBY
+Tabs.Lobby:AddSection("LOBBY MODES")
+
+local AutoJoinSolo = Tabs.Lobby:AddToggle("AutoJoinSolo", {
+    Title = "Join (Solo)",
+    Description = "",
+    Default = false
+})
+
+local AutoNormal = Tabs.Lobby:AddToggle("AutoNormal", {
+    Title = "Normal",
+    Description = "",
+    Default = false
+})
+
+local AutoHard = Tabs.Lobby:AddToggle("AutoHard", {
+    Title = "Hard",
+    Description = "",
+    Default = false
+})
+
+local AutoNightmare = Tabs.Lobby:AddToggle("AutoNightmare", {
+    Title = "Nightmare",
+    Description = "",
+    Default = false
+})
+
+local AutoCampaign = Tabs.Lobby:AddToggle("AutoCampaign", {
+    Title = "Campaign",
+    Description = "",
+    Default = false
+})
+
+local AutoEndless = Tabs.Lobby:AddToggle("AutoEndless", {
+    Title = "Endless",
+    Description = "",
+    Default = false
+})
+
+local AutoRaid = Tabs.Lobby:AddToggle("AutoRaid", {
+    Title = "Raid",
+    Description = "",
+    Default = false
+})
+
+Tabs.Lobby:AddSection("MAP SELECTION")
+
+local AutoMapSchool = Tabs.Lobby:AddToggle("AutoMapSchool", {
+    Title = "Map School",
+    Description = "",
+    Default = false
+})
+
+local AutoMapSewers = Tabs.Lobby:AddToggle("AutoMapSewers", {
+    Title = "Map Sewers",
+    Description = "",
+    Default = false
+})
+
+local AutoMapCarnival = Tabs.Lobby:AddToggle("AutoMapCarnival", {
+    Title = "Map Carnival",
+    Description = "",
+    Default = false
+})
+
+local AutoMapShotgun = Tabs.Lobby:AddToggle("AutoMapShotgun", {
+    Title = "Boss Shotgun",
+    Description = "",
+    Default = false
+})
+
+local AutoGraveyard = Tabs.Lobby:AddToggle("AutoGraveyard", {
+    Title = "Boss Graveyard",
+    Description = "",
+    Default = false
+})
+
+local AutoReaperTrial = Tabs.Lobby:AddToggle("AutoReaperTrial", {
+    Title = "Boss ReaperTrial",
+    Description = "",
+    Default = false
+})
+
+local AutoIsland = Tabs.Lobby:AddToggle("AutoIsland", {
+    Title = "Map Island",
+    Description = "",
+    Default = false
+})
+
+-- TAB 3: WEAPONS
+Tabs.Weapons:AddSection("SPIN WEAPONS")
+
+local AutoSpinWeapons = Tabs.Weapons:AddToggle("AutoSpinWeapons", {
+    Title = "Spin Weapons & Skills",
+    Description = "",
+    Default = false
+})
+
+Tabs.Weapons:AddSection("WEAPONS")
+
+local AutoKatana = Tabs.Weapons:AddToggle("AutoKatana", {
+    Title = "Katana",
+    Description = "",
+    Default = false
+})
+
+local AutoGreatsword = Tabs.Weapons:AddToggle("AutoGreatsword", {
+    Title = "Greatsword",
+    Description = "",
+    Default = false
+})
+
+local AutoScissors = Tabs.Weapons:AddToggle("AutoScissors", {
+    Title = "Scissors",
+    Description = "",
+    Default = false
+})
+
+local AutoAmchot = Tabs.Weapons:AddToggle("AutoAmchot", {
+    Title = "Amchot",
+    Description = "",
+    Default = false
+})
+
+local AutoHandFan = Tabs.Weapons:AddToggle("AutoHandFan", {
+    Title = "Hand Fan",
+    Description = "",
+    Default = false
+})
+
+local AutoShoes = Tabs.Weapons:AddToggle("AutoShoes", {
+    Title = "Shoes",
+    Description = "",
+    Default = false
+})
+
+local AutoGhost = Tabs.Weapons:AddToggle("AutoGhost", {
+    Title = "Ghost",
+    Description = "",
+    Default = false
+})
+
+local AutoSpinalBlade = Tabs.Weapons:AddToggle("AutoSpinalBlade", {
+    Title = "Spinal Blade",
+    Description = "",
+    Default = false
+})
+
+local AutoVampire = Tabs.Weapons:AddToggle("AutoVampire", {
+    Title = "Vampire",
+    Description = "",
+    Default = false
+})
+
+local AutoDoubleDmg = Tabs.Weapons:AddToggle("AutoDoubleDmg", {
+    Title = "Double Damage",
+    Description = "",
+    Default = false
+})
+
+local AutoDamageShield = Tabs.Weapons:AddToggle("AutoDamageShield", {
+    Title = "Damage Shield",
+    Description = "",
+    Default = false
+})
+
+-- TAB 4: COMBAT
+Tabs.Combat:AddSection("TRAITS")
+
+local AutoTraitBeast = Tabs.Combat:AddToggle("AutoTraitBeast", {
+    Title = "Trait Beast",
+    Description = "",
+    Default = false
+})
+
+local AutoTraitProdigy = Tabs.Combat:AddToggle("AutoTraitProdigy", {
+    Title = "Trait Prodigy",
+    Description = "",
+    Default = false
+})
+
+local AutoCriticalDmg = Tabs.Combat:AddToggle("AutoCriticalDmg", {
+    Title = "Critical Dmg",
+    Description = "",
+    Default = false
+})
+
+Tabs.Combat:AddSection("TRAIL WEAPON")
+
+local AutoTrailWeaponSlot1 = Tabs.Combat:AddToggle("AutoTrailWeaponSlot1", {
+    Title = "Trail Weapon Slot 1",
+    Description = "",
+    Default = false
+})
+
+local AutoTrailWeaponSlot2 = Tabs.Combat:AddToggle("AutoTrailWeaponSlot2", {
+    Title = "Trail Weapon Slot 2",
+    Description = "",
+    Default = false
+})
+
+local AutoTrailWeaponSlot3 = Tabs.Combat:AddToggle("AutoTrailWeaponSlot3", {
+    Title = "Trail Weapon Slot 3",
+    Description = "",
+    Default = false
+})
+
+local AutoTrailWeaponSlot4 = Tabs.Combat:AddToggle("AutoTrailWeaponSlot4", {
+    Title = "Trail Weapon Slot 4",
+    Description = "",
+    Default = false
+})
+
+Tabs.Combat:AddSection("WEAPON FARM")
+
+local AutoWeapon1 = Tabs.Combat:AddToggle("AutoWeapon1", {
+    Title = "Weapon 1",
+    Description = "",
+    Default = false
+})
+
+local AutoWeapon2 = Tabs.Combat:AddToggle("AutoWeapon2", {
+    Title = "Weapon 2",
+    Description = "",
+    Default = false
+})
+
+local AutoWeapon3 = Tabs.Combat:AddToggle("AutoWeapon3", {
+    Title = "Weapon 3",
+    Description = "",
+    Default = false
+})
+
+local AutoWeapon4 = Tabs.Combat:AddToggle("AutoWeapon4", {
+    Title = "Weapon 4",
+    Description = "",
+    Default = false
+})
+
+local AutoNormalAttack = Tabs.Combat:AddToggle("AutoNormalAttack", {
+    Title = "Normal Attack",
+    Description = "",
+    Default = false
+})
+
+local AutoFastAttack = Tabs.Combat:AddToggle("AutoFastAttack", {
+    Title = "Fast Attack",
+    Description = "",
+    Default = false
+})
+
+local AutoSuperAttack = Tabs.Combat:AddToggle("AutoSuperAttack", {
+    Title = "Super Attack (Risk)",
+    Description = "",
+    Default = false
+})
+
+local AutoBypassSchool = Tabs.Combat:AddToggle("AutoBypassSchool", {
+    Title = "Bypass School",
+    Description = "",
+    Default = false
+})
+
+Tabs.Combat:AddSection("FLYING MODE")
+
+local ModeSafe = Tabs.Combat:AddToggle("ModeSafe", {
+    Title = "Safe",
+    Description = "",
+    Default = false
+})
+
+local ModeBehind = Tabs.Combat:AddToggle("ModeBehind", {
+    Title = "Behind",
+    Description = "",
+    Default = false
+})
+
+local ModeAbove = Tabs.Combat:AddToggle("ModeAbove", {
+    Title = "Above",
+    Description = "",
+    Default = false
+})
+
+local ModeNormal = Tabs.Combat:AddToggle("ModeNormal", {
+    Title = "Normal",
+    Description = "",
+    Default = false
+})
+
+-- TAB 5: SKILLS
+Tabs.Skills:AddSection("USE SKILLS")
+
+local AutoSkillE = Tabs.Skills:AddToggle("AutoSkillE", {
+    Title = "Skill E",
+    Description = "",
+    Default = false
+})
+
+local AutoSkillZ = Tabs.Skills:AddToggle("AutoSkillZ", {
+    Title = "Skill Z",
+    Description = "",
+    Default = false
+})
+
+local AutoSkillX = Tabs.Skills:AddToggle("AutoSkillX", {
+    Title = "Skill X",
+    Description = "",
+    Default = false
+})
+
+local AutoSkillC = Tabs.Skills:AddToggle("AutoSkillC", {
+    Title = "Skill C",
+    Description = "",
+    Default = false
+})
+
+local AutoSkillG = Tabs.Skills:AddToggle("AutoSkillG", {
+    Title = "Skill G",
+    Description = "",
+    Default = false
+})
+
+-- TAB 6: MISC
+Tabs.Misc:AddSection("PERFORMANCE")
+
+local NoLagMode = Tabs.Misc:AddToggle("NoLagMode", {
+    Title = "No Lag Mode",
+    Description = "",
+    Default = false
+})
+
+local FpsBoost = Tabs.Misc:AddToggle("FpsBoost", {
+    Title = "FPS Boost",
+    Description = "",
+    Default = false
+})
+
+local DarkMode = Tabs.Misc:AddToggle("DarkMode", {
+    Title = "Dark Mode",
+    Description = "",
+    Default = false
+})
+
+local AFKMode = Tabs.Misc:AddToggle("AFKMode", {
+    Title = "AFK Mode",
+    Description = "",
+    Default = false
+})
+
+Tabs.Misc:AddSection("SOCIAL")
+
+Tabs.Misc:AddParagraph({
+    Title = "TikTok",
+    Content = "@Riky_Hub"
+})
+
+-- Save/Load System
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+InterfaceManager:SetFolder("RikyHub")
+SaveManager:SetFolder("RikyHub/bloxfruits")
+InterfaceManager:BuildInterfaceSection(Tabs.Main)
+SaveManager:BuildConfigSection(Tabs.Main)
+
+-- Footer
+Tabs.Main:AddSection("INFO")
+
+Tabs.Main:AddParagraph({
+    Title = "Riky Hub Premium V1.4",
+    Content = "Discord: " .. RikyHub.Discord
+})
+
+-- Floating Button
+local RikyFloatingButton = Instance.new("ScreenGui")
+local ImageButton = Instance.new("ImageButton")
+local UICorner = Instance.new("UICorner")
+
+RikyFloatingButton.Name = "RikyFloatingButton"
+RikyFloatingButton.Parent = game:GetService("CoreGui")
+RikyFloatingButton.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+ImageButton.Parent = RikyFloatingButton
+ImageButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+ImageButton.BorderSizePixel = 0
+ImageButton.Position = UDim2.new(0.02, 0, 0.4, 0)
+ImageButton.Size = UDim2.new(0, 60, 0, 60)
+ImageButton.Image = RikyHub.ImageID
+ImageButton.Draggable = true
+
+UICorner.Parent = ImageButton
+UICorner.CornerRadius = UDim.new(0, 12)
+
+-- Button Animation
+local rotateTween = TweenService:Create(ImageButton, 
+    TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, -1), 
+    {Rotation = 360}
+)
+
+ImageButton.MouseEnter:Connect(function()
+    rotateTween:Play()
+    ImageButton.Size = UDim2.new(0, 65, 0, 65)
+end)
+
+ImageButton.MouseLeave:Connect(function()
+    rotateTween:Pause()
+    ImageButton.Rotation = 0
+    ImageButton.Size = UDim2.new(0, 60, 0, 60)
+end)
+
+ImageButton.MouseButton1Click:Connect(function()
+    RikyWindow:Minimize()
+end)
+
+-- Select main tab
+RikyWindow:SelectTab(1)
+
+-- Initialization
+warn("[Riky Hub] Initialized - V1.4")
