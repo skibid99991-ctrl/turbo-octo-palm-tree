@@ -1,0 +1,486 @@
+-- Riky Hub | Blox Fruit Premium - ĐẦY ĐỦ + WELCOME
+local Players = game:GetService("Players")
+local plr = Players.LocalPlayer
+local VirtualUser = game:GetService("VirtualUser")
+local TweenService = game:GetService("TweenService")
+
+-- Welcome Screen
+local WelcomeGui = Instance.new("ScreenGui")
+WelcomeGui.Name = "RikyHubWelcome"
+WelcomeGui.Parent = game:GetService("CoreGui")
+
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 400, 0, 300)
+MainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+MainFrame.BorderSizePixel = 0
+MainFrame.Parent = WelcomeGui
+
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 12)
+UICorner.Parent = MainFrame
+
+local ImageLabel = Instance.new("ImageLabel")
+ImageLabel.Size = UDim2.new(0, 120, 0, 120)
+ImageLabel.Position = UDim2.new(0.5, -60, 0.2, -60)
+ImageLabel.BackgroundTransparency = 1
+ImageLabel.Image = "rbxassetid://106603644969449"
+ImageLabel.Parent = MainFrame
+
+local WelcomeText = Instance.new("TextLabel")
+WelcomeText.Size = UDim2.new(0, 300, 0, 40)
+WelcomeText.Position = UDim2.new(0.5, -150, 0.6, -20)
+WelcomeText.BackgroundTransparency = 1
+WelcomeText.Text = "Welcome To Riky Hub | Blox Fruit"
+WelcomeText.TextColor3 = Color3.fromRGB(255, 255, 255)
+WelcomeText.TextScaled = true
+WelcomeText.Font = Enum.Font.GothamBold
+WelcomeText.Parent = MainFrame
+
+local VersionText = Instance.new("TextLabel")
+VersionText.Size = UDim2.new(0, 200, 0, 20)
+VersionText.Position = UDim2.new(0.5, -100, 0.8, -10)
+VersionText.BackgroundTransparency = 1
+VersionText.Text = "Version V1.8 Premium"
+VersionText.TextColor3 = Color3.fromRGB(200, 200, 200)
+VersionText.TextScaled = true
+VersionText.Font = Enum.Font.Gotham
+VersionText.Parent = MainFrame
+
+local LoadingText = Instance.new("TextLabel")
+LoadingText.Size = UDim2.new(0, 200, 0, 20)
+LoadingText.Position = UDim2.new(0.5, -100, 0.9, -10)
+LoadingText.BackgroundTransparency = 1
+LoadingText.Text = "Loading..."
+LoadingText.TextColor3 = Color3.fromRGB(150, 150, 150)
+LoadingText.TextScaled = true
+LoadingText.Font = Enum.Font.Gotham
+LoadingText.Parent = MainFrame
+
+-- Loading animation
+spawn(function()
+    local dots = {"", ".", "..", "..."}
+    local count = 0
+    while WelcomeGui.Parent do
+        count = (count % 4) + 1
+        LoadingText.Text = "Loading" .. dots[count]
+        wait(0.5)
+    end
+end)
+
+-- Load Fluent UI
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+
+-- Main Menu ĐẦY ĐỦ
+local RikyWindow = Fluent:CreateWindow({
+    Title = "Riky Hub | Blox Fruit V1.8 Premium",
+    SubTitle = "By Riky Development Team",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 500),
+    Acrylic = false,
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.RightControl
+})
+
+-- Tabs ĐẦY ĐỦ 15 tabs
+local Tabs = {
+    Main = RikyWindow:AddTab({Title = "Main", Icon = ""}),
+    Farmer = RikyWindow:AddTab({Title = "Farmer", Icon = ""}),
+    Settings = RikyWindow:AddTab({Title = "Settings", Icon = ""}),
+    QuestItem = RikyWindow:AddTab({Title = "Quest + Item", Icon = ""}),
+    RaceV4 = RikyWindow:AddTab({Title = "Race V4 + Mirage", Icon = ""}),
+    SeaEvent = RikyWindow:AddTab({Title = "Sea Event", Icon = ""}),
+    Kitsune = RikyWindow:AddTab({Title = "Kitsune Event", Icon = ""}),
+    Volcano = RikyWindow:AddTab({Title = "Volcano", Icon = ""}),
+    Fishing = RikyWindow:AddTab({Title = "Fishing", Icon = ""}),
+    LocalPlayer = RikyWindow:AddTab({Title = "Local Player", Icon = ""}),
+    Visual = RikyWindow:AddTab({Title = "Visual", Icon = ""}),
+    FruitRaid = RikyWindow:AddTab({Title = "Fruit + Raid", Icon = ""}),
+    Teleport = RikyWindow:AddTab({Title = "Teleport", Icon = ""}),
+    Shop = RikyWindow:AddTab({Title = "Shop", Icon = ""}),
+    Misc = RikyWindow:AddTab({Title = "Misc", Icon = ""})
+}
+
+-- ======== MAIN TAB ========
+Tabs.Main:AddSection("STATUS")
+Tabs.Main:AddParagraph({Title = "RIKY HUB: ACTIVE", Content = "V1.8 Premium | Blox Fruit"})
+
+Tabs.Main:AddSection("UTILITIES")
+local AntiAFK = Tabs.Main:AddToggle("AntiAFK", {Title = "Anti-AFK [OFF]", Default = false})
+AntiAFK:OnChanged(function(Value)
+    if Value then
+        AntiAFK:SetTitle("Anti-AFK [ON]")
+        plr.Idled:Connect(function()
+            VirtualUser:CaptureController()
+            VirtualUser:ClickButton2(Vector2.new())
+        end)
+    else
+        AntiAFK:SetTitle("Anti-AFK [OFF]")
+    end
+end)
+
+-- ======== SETTINGS TAB ========
+Tabs.Settings:AddSection("AUTO COMBAT")
+Tabs.Settings:AddToggle("AutoAttackMob", {Title = "Auto Attack Mob [OFF]", Default = false})
+Tabs.Settings:AddToggle("AutoAttackPlayer", {Title = "Auto Attack Player [OFF]", Default = false})
+Tabs.Settings:AddToggle("AutoShootGun", {Title = "Auto Shoot Gun [OFF]", Default = false})
+Tabs.Settings:AddToggle("BringMob", {Title = "Bring Mob [OFF]", Default = false})
+Tabs.Settings:AddToggle("AutoHaki", {Title = "Auto Haki [OFF]", Default = false})
+Tabs.Settings:AddToggle("AutoKen", {Title = "Auto Ken [OFF]", Default = false})
+
+Tabs.Settings:AddSection("VISUAL SETTINGS")
+Tabs.Settings:AddToggle("DisableNotifications", {Title = "Disable Notifications [OFF]", Default = false})
+Tabs.Settings:AddToggle("DisableDamageCounter", {Title = "Disable Damage Counter [OFF]", Default = false})
+
+Tabs.Settings:AddSection("PERFORMANCE")
+Tabs.Settings:AddToggle("FixLag", {Title = "Fix Lag [OFF]", Default = false})
+Tabs.Settings:AddToggle("FpsBoost", {Title = "FPS Boost [OFF]", Default = false})
+Tabs.Settings:AddToggle("WhiteScreen", {Title = "White Screen [OFF]", Default = false})
+
+-- ======== FARMER TAB ========
+Tabs.Farmer:AddSection("WEAPON & ATTACK")
+Tabs.Farmer:AddDropdown("WeaponType", {Title = "Weapon Type", Values = {"Melee", "Sword", "Gun", "Blox Fruit"}, Default = 1})
+Tabs.Farmer:AddDropdown("AttackMode", {Title = "Attack Mode", Values = {"Fast Attack", "Riky Attack", "Super Attack (Risk Kick)"}, Default = 1})
+Tabs.Farmer:AddDropdown("TweenSpeed", {Title = "Tween Speed", Values = {"150", "200", "250", "300", "350", "400", "450 Kick", "500 Risk Kick"}, Default = 1})
+
+Tabs.Farmer:AddSection("LEVEL UP")
+Tabs.Farmer:AddToggle("AutoFarmLevel", {Title = "Auto Farm Level [OFF]", Default = false})
+Tabs.Farmer:AddToggle("AutoQuest", {Title = "Auto Quest [OFF]", Default = false})
+Tabs.Farmer:AddToggle("MobAura", {Title = "Mob Aura [OFF]", Default = false})
+
+Tabs.Farmer:AddSection("BONE")
+Tabs.Farmer:AddToggle("AutoFarmBone", {Title = "Auto Farm Bone [OFF]", Default = false})
+Tabs.Farmer:AddToggle("AutoQuestBone", {Title = "Auto Quest Bone [OFF]", Default = false})
+Tabs.Farmer:AddToggle("AutoRandomBone", {Title = "Auto Random Bone [OFF]", Default = false})
+Tabs.Farmer:AddToggle("AutoHallowScythe", {Title = "Auto Hallow Scythe [OFF]", Default = false})
+Tabs.Farmer:AddToggle("AutoTryLucky", {Title = "Auto Try Lucky [OFF]", Default = false})
+
+Tabs.Farmer:AddSection("DOUGH BOSS")
+Tabs.Farmer:AddToggle("AutoFarmCakePrince", {Title = "Auto Farm Cake Prince [OFF]", Default = false})
+Tabs.Farmer:AddToggle("AcceptQuestCakePrince", {Title = "Accept Quest Cake Prince [OFF]", Default = false})
+Tabs.Farmer:AddToggle("AutoCakePrinceRaid", {Title = "Auto Cake Prince Raid [OFF]", Default = false})
+Tabs.Farmer:AddToggle("AutoDoughKingRaid", {Title = "Auto Dough King Raid [OFF]", Default = false})
+
+Tabs.Farmer:AddSection("BERRY & ELITE")
+Tabs.Farmer:AddToggle("AutoCollectBerries", {Title = "Auto Collect Berries [OFF]", Default = false})
+Tabs.Farmer:AddToggle("CollectBerriesHop", {Title = "Collect Berries Hop [OFF]", Default = false})
+Tabs.Farmer:AddToggle("AutoEliteHunter", {Title = "Auto Elite Hunter [OFF]", Default = false})
+
+Tabs.Farmer:AddSection("CHEST")
+Tabs.Farmer:AddToggle("AutoFarmChest", {Title = "Auto Farm Chest (Tele) [OFF]", Default = false})
+Tabs.Farmer:AddToggle("AutoFarmChestBypass", {Title = "Auto Farm Chest Bypass [OFF]", Default = false})
+Tabs.Farmer:AddToggle("AutoStopHaveItem", {Title = "Auto Stop You Have Item [OFF]", Default = false})
+
+Tabs.Farmer:AddSection("TYRANT OF THE SKIES")
+Tabs.Farmer:AddToggle("AutoFarmTyrant", {Title = "Auto Farm Tyrant Of The Skies [OFF]", Default = false})
+Tabs.Farmer:AddToggle("AutoQuestTyrant", {Title = "Auto Quest Tyrant Skies [OFF]", Default = false})
+Tabs.Farmer:AddToggle("AutoTyrantBoss", {Title = "Auto Tyrant Of The Skies Boss [OFF]", Default = false})
+
+Tabs.Farmer:AddSection("MATERIAL")
+Tabs.Farmer:AddDropdown("MaterialSelect", {
+    Title = "Select Material", 
+    Values = {"Vampire Fang", "Gum Powder", "Scrap Metal", "Fish Tail", "Ectoplasm", "Dragon Scale", "Cocoa", "Mini Tusk", "Magma Ore", "Leather"}, 
+    Default = 1
+})
+Tabs.Farmer:AddToggle("StarFarmer", {Title = "Star Farmer [OFF]", Default = false})
+
+-- ======== QUEST + ITEM TAB ========
+Tabs.QuestItem:AddSection("SKILLS")
+Tabs.QuestItem:AddToggle("AutoSuperman", {Title = "Auto Superman [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoDeathstep", {Title = "Auto Deathstep [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoSharkmanKarate", {Title = "Auto Sharkman Karate [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoElectricClaw", {Title = "Auto Electric Claw [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoDragonTalon", {Title = "Auto Dragon Talon [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoGodHuman", {Title = "Auto God Human [OFF]", Default = false})
+
+Tabs.QuestItem:AddSection("ITEMS")
+Tabs.QuestItem:AddToggle("AutoPiratesRaid", {Title = "Auto Pirates Raid [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoRipIndraTrue", {Title = "Auto Rip_Indra True [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoPressHakiButton", {Title = "Auto Press Haki Button [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoYama", {Title = "Auto Yama [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoPhoenixRaid", {Title = "Auto Phoenix Raid [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoMusketeerHat", {Title = "Auto Musketeer Hat [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoTwinHook", {Title = "Auto Twin Hook [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoRainbowHaki", {Title = "Auto Rainbow Haki [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoObservationHakiV2", {Title = "Auto Observation Haki v2 [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoCavander", {Title = "Auto Cavander [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoTushita", {Title = "Auto Tushita [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoHolyTorch", {Title = "Auto Holy Torch [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoSoulGuitarFull", {Title = "Auto Soul Guitar Full [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoBuddy", {Title = "Auto Buddy [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoFinishYamaQuest", {Title = "Auto Finish Yama Quest [OFF]", Default = false})
+Tabs.QuestItem:AddToggle("AutoGetCDK", {Title = "Auto Get CDK [OFF]", Default = false})
+
+-- ======== RACE V4 + MIRAGE TAB ========
+Tabs.RaceV4:AddSection("MIRAGE")
+Tabs.RaceV4:AddButton({Title = "Teleport Mirage Island"})
+Tabs.RaceV4:AddButton({Title = "Teleport Advanced Fruit"})
+Tabs.RaceV4:AddToggle("AutoLookMoon", {Title = "Auto Look Moon [OFF]", Default = false})
+Tabs.RaceV4:AddToggle("TweenGear", {Title = "Tween Gear [OFF]", Default = false})
+Tabs.RaceV4:AddButton({Title = "Teleport Temple Of Time"})
+Tabs.RaceV4:AddButton({Title = "Teleport Lever Pull"})
+Tabs.RaceV4:AddButton({Title = "Teleport Npc Ancient One"})
+Tabs.RaceV4:AddToggle("AutoBuyGear", {Title = "Auto Buy Gear [OFF]", Default = false})
+Tabs.RaceV4:AddButton({Title = "Teleport Doors Race"})
+Tabs.RaceV4:AddButton({Title = "Teleport Clock"})
+
+Tabs.RaceV4:AddSection("RACE V4")
+Tabs.RaceV4:AddToggle("AutoTrial", {Title = "Auto Trial [OFF]", Default = false})
+Tabs.RaceV4:AddToggle("AutoQuestV4", {Title = "Auto Quest V4 [OFF]", Default = false})
+Tabs.RaceV4:AddToggle("AutoKillPlayer", {Title = "Auto Kill Player (Trial) [OFF]", Default = false})
+
+-- ======== SEA EVENT TAB ========
+Tabs.SeaEvent:AddSection("BOAT SELECTION")
+Tabs.SeaEvent:AddDropdown("BoatSelect", {
+    Title = "Select Boat",
+    Values = {"Guardian", "PirateGrandBrigade", "MarineGrandBrigade", "PirateBrigade", "MarineBrigade", "PirateSloop", "MarineSloop", "BeastHunter"},
+    Default = 1
+})
+Tabs.SeaEvent:AddDropdown("ZoneSelect", {
+    Title = "Select Zone", 
+    Values = {"Zone 1", "Zone 2", "Zone 3", "Zone 4", "Zone 5", "Zone 6"}, 
+    Default = 1
+})
+Tabs.SeaEvent:AddDropdown("SpeedBoat", {
+    Title = "Speed Boat",
+    Values = {"150", "200", "250", "300", "350", "400 (Delay)", "450 (Kick)", "500 (Risk Kick)"},
+    Default = 1
+})
+
+Tabs.SeaEvent:AddSection("SEA EVENT")
+Tabs.SeaEvent:AddButton({Title = "Start Sea Event"})
+Tabs.SeaEvent:AddToggle("AutoKillShark", {Title = "Auto Kill Shark [OFF]", Default = false})
+Tabs.SeaEvent:AddToggle("AutoKillPiranha", {Title = "Auto Kill Piranha [OFF]", Default = false})
+Tabs.SeaEvent:AddToggle("AutoFishCrew", {Title = "Auto Fish Crew [OFF]", Default = false})
+Tabs.SeaEvent:AddToggle("AutoKillGhostShip", {Title = "Auto Kill Ghost Ship [OFF]", Default = false})
+Tabs.SeaEvent:AddToggle("AutoKillPirateGrandBrigade", {Title = "Auto Kill Pirate Grand Brigade [OFF]", Default = false})
+Tabs.SeaEvent:AddToggle("AutoKillTerrorShark", {Title = "Auto Kill Terror Shark [OFF]", Default = false})
+
+Tabs.SeaEvent:AddSection("BOAT SETTINGS")
+Tabs.SeaEvent:AddToggle("EnableSpeedBoat", {Title = "Enable Speed Boat [OFF]", Default = false})
+Tabs.SeaEvent:AddToggle("EnableFlyBoat", {Title = "Enable Fly Boat [OFF]", Default = false})
+Tabs.SeaEvent:AddToggle("NoclipRock", {Title = "Noclip Rock [OFF]", Default = false})
+
+-- ======== KITSUNE EVENT TAB ========
+Tabs.Kitsune:AddSection("KITSUNE EVENT")
+Tabs.Kitsune:AddButton({Title = "Teleport Kitsune"})
+Tabs.Kitsune:AddToggle("AutoCollectAzureEmber", {Title = "Auto Collect Azure Ember [OFF]", Default = false})
+Tabs.Kitsune:AddDropdown("SetAzureEmber", {Title = "Set Azure Ember", Values = {"10", "15", "20", "25"}, Default = 1})
+Tabs.Kitsune:AddToggle("AutoTradeAzureEmber", {Title = "Auto Trade Azure Ember [OFF]", Default = false})
+Tabs.Kitsune:AddToggle("AutoFindLeviathan", {Title = "Auto Find Leviathan [OFF]", Default = false})
+Tabs.Kitsune:AddToggle("TweenFrozenDimension", {Title = "Tween Frozen Dimension [OFF]", Default = false})
+Tabs.Kitsune:AddToggle("AutoAttackLeviathan", {Title = "Auto Attack Leviathan [OFF]", Default = false})
+Tabs.Kitsune:AddToggle("AttackSegmentLeviathan", {Title = "Attack Segment Leviathan [OFF]", Default = false})
+
+Tabs.Kitsune:AddSection("ENOBLE SKILLS")
+Tabs.Kitsune:AddToggle("EnobleMeleeSkill", {Title = "Enoble Melee Skill [OFF]", Default = false})
+Tabs.Kitsune:AddToggle("EnobleFruitSkill", {Title = "Enoble Fruit Skill [OFF]", Default = false})
+Tabs.Kitsune:AddToggle("EnobleSwordSkill", {Title = "Enoble Sword Skill [OFF]", Default = false})
+Tabs.Kitsune:AddToggle("EnobleGunSkill", {Title = "Enoble Gun Skill [OFF]", Default = false})
+
+-- ======== VOLCANO TAB ========
+Tabs.Volcano:AddSection("VOLCANO")
+Tabs.Volcano:AddButton({Title = "Teleport Dojo Trainer"})
+Tabs.Volcano:AddButton({Title = "Teleport To Dragon Hunter"})
+Tabs.Volcano:AddButton({Title = "Teleport To Dragon Wizard"})
+Tabs.Volcano:AddToggle("AutoQuestDragonHunter", {Title = "Auto Quest Dragon Hunter [OFF]", Default = false})
+Tabs.Volcano:AddButton({Title = "Craft Volcanic Magnet"})
+Tabs.Volcano:AddButton({Title = "Craft Dino Hood"})
+Tabs.Volcano:AddButton({Title = "Craft T-rex Skull"})
+Tabs.Volcano:AddButton({Title = "Find Prehistoric Island"})
+Tabs.Volcano:AddButton({Title = "Teleport Prehistoric Island"})
+Tabs.Volcano:AddButton({Title = "Teleport Skull Core"})
+Tabs.Volcano:AddToggle("AutoKillGolemAura", {Title = "Auto Kill Golem Aura [OFF]", Default = false})
+Tabs.Volcano:AddToggle("AutoFixVolcano", {Title = "Auto Fix Volcano [OFF]", Default = false})
+Tabs.Volcano:AddToggle("CollectBone", {Title = "Collect Bone [OFF]", Default = false})
+Tabs.Volcano:AddToggle("CollectEgg", {Title = "Collect Egg [OFF]", Default = false})
+Tabs.Volcano:AddToggle("AutoTrialDraco", {Title = "Auto Trial Draco [OFF]", Default = false})
+Tabs.Volcano:AddButton({Title = "Teleport Door Draco"})
+Tabs.Volcano:AddToggle("AutoUseMelee", {Title = "Auto Use Melee [OFF]", Default = false})
+Tabs.Volcano:AddToggle("AutoUseFruit", {Title = "Auto Use Fruit [OFF]", Default = false})
+Tabs.Volcano:AddToggle("AutoUseSword", {Title = "Auto Use Sword [OFF]", Default = false})
+Tabs.Volcano:AddToggle("AutoUseGun", {Title = "Auto Use Gun [OFF]", Default = false})
+
+-- ======== FISHING TAB ========
+Tabs.Fishing:AddSection("FISHING")
+Tabs.Fishing:AddDropdown("FishingRod", {
+    Title = "Select Fishing Rod",
+    Values = {"Fishing Rod", "Gold Rod", "Shark Rod", "Shell Rod", "Treasure Rod"},
+    Default = 1
+})
+Tabs.Fishing:AddDropdown("BaitSelect", {
+    Title = "Select Bait",
+    Values = {"Basic Bait", "Kelp Bait", "Good Bait", "Abyssal Bait", "Frozen Bait", "Epic Bait", "Carnivore Bait"},
+    Default = 1
+})
+Tabs.Fishing:AddToggle("AutoFishing", {Title = "Auto Fishing [OFF]", Default = false})
+
+-- ======== LOCAL PLAYER TAB ========
+Tabs.LocalPlayer:AddSection("AIMBOT")
+Tabs.LocalPlayer:AddToggle("AimbotNoTeam", {Title = "Aimbot No Team [OFF]", Default = false})
+Tabs.LocalPlayer:AddToggle("AimbotLeastBlood", {Title = "Aimbot Least Blood [OFF]", Default = false})
+Tabs.LocalPlayer:AddToggle("EnabledPvP", {Title = "Enabled PvP [OFF]", Default = false})
+Tabs.LocalPlayer:AddToggle("AutoActiveV3", {Title = "Auto Active V3 [OFF]", Default = false})
+Tabs.LocalPlayer:AddToggle("AutoActiveV4", {Title = "Auto Active V4 [OFF]", Default = false})
+Tabs.LocalPlayer:AddToggle("EnableFly", {Title = "Enable Fly [OFF]", Default = false})
+Tabs.LocalPlayer:AddToggle("WalkOnWater", {Title = "Walk On Water [OFF]", Default = false})
+
+Tabs.LocalPlayer:AddSection("MOVEMENT")
+Tabs.LocalPlayer:AddDropdown("WalkSpeed", {
+    Title = "Select Walk Speed",
+    Values = {"150", "200", "250", "300", "350"},
+    Default = 1
+})
+Tabs.LocalPlayer:AddToggle("NoClip", {Title = "No Clip [OFF]", Default = false})
+
+-- ======== VISUAL TAB ========
+Tabs.Visual:AddSection("ESP")
+Tabs.Visual:AddToggle("EspPlayer", {Title = "ESP Player [OFF]", Default = false})
+Tabs.Visual:AddToggle("EspFruit", {Title = "ESP Fruit [OFF]", Default = false})
+Tabs.Visual:AddToggle("EspBerries", {Title = "ESP Berries [OFF]", Default = false})
+Tabs.Visual:AddToggle("EspIsland", {Title = "ESP Island [OFF]", Default = false})
+Tabs.Visual:AddToggle("EspMysticIsland", {Title = "ESP Mystic Island [OFF]", Default = false})
+Tabs.Visual:AddToggle("EspIslandKitsune", {Title = "ESP Island Kitsune [OFF]", Default = false})
+
+-- ======== FRUIT + RAID TAB ========
+Tabs.FruitRaid:AddSection("FRUIT SELECTION")
+Tabs.FruitRaid:AddDropdown("ChipsSelect", {
+    Title = "Select Chips",
+    Values = {"Flame", "Ice", "Quake", "Dark", "Light", "Buddha", "Sand", "Magma", "Dough", "Phoenix"},
+    Default = 1
+})
+
+Tabs.FruitRaid:AddSection("RAID")
+Tabs.FruitRaid:AddToggle("AutoStartDungeon", {Title = "Auto Start Dungeon [OFF]", Default = false})
+Tabs.FruitRaid:AddToggle("AutoNextIslandKillMob", {Title = "Auto Next Island Kill Mob [OFF]", Default = false})
+Tabs.FruitRaid:AddToggle("AutoAwakener", {Title = "Auto Awakener [OFF]", Default = false})
+Tabs.FruitRaid:AddToggle("AutoRandomFruit", {Title = "Auto Random Fruit [OFF]", Default = false})
+
+Tabs.FruitRaid:AddSection("DEVIL FRUIT")
+Tabs.FruitRaid:AddButton({Title = "Open Devil Shop"})
+Tabs.FruitRaid:AddButton({Title = "Open Devil Shop Mirage"})
+Tabs.FruitRaid:AddToggle("AutoStoreFruit", {Title = "Auto Store Fruit [OFF]", Default = false})
+Tabs.FruitRaid:AddToggle("BringFruit", {Title = "Bring Fruit [OFF]", Default = false})
+Tabs.FruitRaid:AddToggle("TweenFruit", {Title = "Tween Fruit [OFF]", Default = false})
+
+-- ======== TELEPORT TAB ========
+Tabs.Teleport:AddSection("SEA TELEPORT")
+Tabs.Teleport:AddButton({Title = "Teleport To Sea 1"})
+Tabs.Teleport:AddButton({Title = "Teleport To Sea 2"})
+Tabs.Teleport:AddButton({Title = "Teleport To Sea 3"})
+
+Tabs.Teleport:AddSection("ISLAND TELEPORT")
+Tabs.Teleport:AddDropdown("IslandSelect", {
+    Title = "Select Island",
+    Values = {"Third Sea", "Port Town", "Hydra Island", "Great Tree", "Floating Turtle", "Mansion", "Castle On The Sea", "Haunted Castle", "Sea Of Treats"},
+    Default = 1
+})
+Tabs.Teleport:AddToggle("TeleportBypass", {Title = "Teleport Bypass [OFF]", Default = false})
+
+-- ======== SHOP TAB ========
+Tabs.Shop:AddSection("ABILITIES")
+Tabs.Shop:AddButton({Title = "Buy Geppo"})
+Tabs.Shop:AddButton({Title = "Buy Buso Haki"})
+Tabs.Shop:AddButton({Title = "Buy Soru"})
+Tabs.Shop:AddButton({Title = "Buy Observation Haki"})
+Tabs.Shop:AddToggle("AutoBuyAbilities", {Title = "Auto Buy Abilities [OFF]", Default = false})
+
+Tabs.Shop:AddSection("FIGHTING STYLES")
+Tabs.Shop:AddButton({Title = "Buy Black Leg"})
+Tabs.Shop:AddButton({Title = "Buy Electro"})
+Tabs.Shop:AddButton({Title = "Buy Fishman Karate"})
+Tabs.Shop:AddButton({Title = "Buy Dragon Craw"})
+Tabs.Shop:AddButton({Title = "Buy Super Human"})
+Tabs.Shop:AddButton({Title = "Buy Death Step"})
+Tabs.Shop:AddButton({Title = "Buy Sharkman Karate"})
+Tabs.Shop:AddButton({Title = "Buy Electric Claw"})
+Tabs.Shop:AddButton({Title = "Buy Dragon Talon"})
+Tabs.Shop:AddButton({Title = "Buy God Human"})
+Tabs.Shop:AddButton({Title = "Buy Sanguine Art"})
+
+Tabs.Shop:AddSection("SWORDS")
+Tabs.Shop:AddButton({Title = "Buy Cutlass"})
+Tabs.Shop:AddButton({Title = "Buy Katana"})
+Tabs.Shop:AddButton({Title = "Buy Iron Mace"})
+Tabs.Shop:AddButton({Title = "Buy Dual Katana"})
+Tabs.Shop:AddButton({Title = "Buy Pipe"})
+Tabs.Shop:AddButton({Title = "Buy Dual-Headed Blade"})
+Tabs.Shop:AddButton({Title = "Buy Bisento"})
+Tabs.Shop:AddButton({Title = "Buy Triple Katana"})
+Tabs.Shop:AddButton({Title = "Buy Soul Cane"})
+Tabs.Shop:AddButton({Title = "Buy Pile V2"})
+
+Tabs.Shop:AddSection("GUNS")
+Tabs.Shop:AddButton({Title = "Buy Slingshot"})
+Tabs.Shop:AddButton({Title = "Buy Musket"})
+Tabs.Shop:AddButton({Title = "Buy Flintlock"})
+Tabs.Shop:AddButton({Title = "Buy Refined Slingshot"})
+Tabs.Shop:AddButton({Title = "Buy Refined Flintlock"})
+Tabs.Shop:AddButton({Title = "Buy Cannon"})
+Tabs.Shop:AddButton({Title = "Buy Kabucha"})
+
+Tabs.Shop:AddSection("OTHER")
+Tabs.Shop:AddButton({Title = "Reset Stats"})
+Tabs.Shop:AddButton({Title = "Random Race"})
+Tabs.Shop:AddButton({Title = "Buy Ghoul"})
+Tabs.Shop:AddButton({Title = "Buy Cyborg"})
+
+-- ======== MISC TAB ========
+Tabs.Misc:AddSection("SERVER")
+Tabs.Misc:AddButton({Title = "Rejoin Server"})
+Tabs.Misc:AddButton({Title = "Server Hop"})
+Tabs.Misc:AddButton({Title = "Hop To Lower Player"})
+Tabs.Misc:AddButton({Title = "Join Pirates Team"})
+Tabs.Misc:AddButton({Title = "Join Marines"})
+Tabs.Misc:AddButton({Title = "Redeem All Code"})
+Tabs.Misc:AddButton({Title = "Open Title"})
+
+-- Floating Button
+local FloatingButton = Instance.new("ScreenGui")
+local ImageButton = Instance.new("ImageButton")
+local UICorner = Instance.new("UICorner")
+
+FloatingButton.Name = "RikyFloatingButton"
+FloatingButton.Parent = game:GetService("CoreGui")
+
+ImageButton.Parent = FloatingButton
+ImageButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+ImageButton.BorderSizePixel = 0
+ImageButton.Position = UDim2.new(0.02, 0, 0.4, 0)
+ImageButton.Size = UDim2.new(0, 60, 0, 60)
+ImageButton.Image = "rbxassetid://106603644969449"
+ImageButton.Draggable = true
+
+UICorner.Parent = ImageButton
+UICorner.CornerRadius = UDim.new(0, 12)
+
+-- Button Animation
+local rotateTween = TweenService:Create(ImageButton, 
+    TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, -1), 
+    {Rotation = 360}
+)
+
+ImageButton.MouseEnter:Connect(function()
+    rotateTween:Play()
+    ImageButton.Size = UDim2.new(0, 65, 0, 65)
+end)
+
+ImageButton.MouseLeave:Connect(function()
+    rotateTween:Pause()
+    ImageButton.Rotation = 0
+    ImageButton.Size = UDim2.new(0, 60, 0, 60)
+end)
+
+ImageButton.MouseButton1Click:Connect(function()
+    RikyWindow:Minimize()
+end)
+
+-- Ẩn Welcome Screen sau 3 giây
+wait(3)
+WelcomeGui:Destroy()
+
+-- Select main tab
+RikyWindow:SelectTab(1)
+
+warn("Riky Hub V1.8 Premium - ĐẦY ĐỦ + WELCOME Loaded Successfully! 🚀")
+print("15 Tabs | 100+ Features | Welcome Screen | Floating Button")
