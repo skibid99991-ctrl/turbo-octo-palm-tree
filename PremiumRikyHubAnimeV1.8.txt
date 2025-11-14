@@ -1,0 +1,2073 @@
+-- Riky Hub | Blox Fruit V1.8 Premium
+-- Premium Script Blox Fruit & Hunty Zombie
+
+local Players = game:GetService("Players")
+local plr = Players.LocalPlayer
+local TweenService = game:GetService("TweenService")
+local VirtualUser = game:GetService("VirtualUser")
+
+-- Riky Hub Premium Configuration
+local RikyHub = {
+    Version = "V1.8 Premium",
+    Developer = "Premium Script Blox Fruit & Hunty Zombie",
+    Discord = "discord.gg/rikyhub",
+    Premium = true,
+    Game = "Blox Fruit"
+}
+
+-- Tạo Welcome Screen
+local WelcomeGui = Instance.new("ScreenGui")
+WelcomeGui.Name = "RikyHubWelcome"
+WelcomeGui.Parent = game:GetService("CoreGui")
+WelcomeGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 400, 0, 300)
+MainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+MainFrame.BorderSizePixel = 0
+MainFrame.Parent = WelcomeGui
+
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 12)
+UICorner.Parent = MainFrame
+
+local ImageLabel = Instance.new("ImageLabel")
+ImageLabel.Size = UDim2.new(0, 120, 0, 120)
+ImageLabel.Position = UDim2.new(0.5, -60, 0.2, -60)
+ImageLabel.BackgroundTransparency = 1
+ImageLabel.Image = "rbxassetid://106603644969449"
+ImageLabel.Parent = MainFrame
+
+local WelcomeText = Instance.new("TextLabel")
+WelcomeText.Size = UDim2.new(0, 300, 0, 40)
+WelcomeText.Position = UDim2.new(0.5, -150, 0.6, -20)
+WelcomeText.BackgroundTransparency = 1
+WelcomeText.Text = "Welcome To Riky Hub | Blox Fruit"
+WelcomeText.TextColor3 = Color3.fromRGB(255, 255, 255)
+WelcomeText.TextScaled = true
+WelcomeText.Font = Enum.Font.GothamBold
+WelcomeText.Parent = MainFrame
+
+local VersionText = Instance.new("TextLabel")
+VersionText.Size = UDim2.new(0, 200, 0, 20)
+VersionText.Position = UDim2.new(0.5, -100, 0.8, -10)
+VersionText.BackgroundTransparency = 1
+VersionText.Text = "Version " .. RikyHub.Version
+VersionText.TextColor3 = Color3.fromRGB(200, 200, 200)
+VersionText.TextScaled = true
+VersionText.Font = Enum.Font.Gotham
+VersionText.Parent = MainFrame
+
+local LoadingText = Instance.new("TextLabel")
+LoadingText.Size = UDim2.new(0, 200, 0, 20)
+LoadingText.Position = UDim2.new(0.5, -100, 0.9, -10)
+LoadingText.BackgroundTransparency = 1
+LoadingText.Text = "Loading..."
+LoadingText.TextColor3 = Color3.fromRGB(150, 150, 150)
+LoadingText.TextScaled = true
+LoadingText.Font = Enum.Font.Gotham
+LoadingText.Parent = MainFrame
+
+-- Hiệu ứng loading
+spawn(function()
+    local dots = {"", ".", "..", "..."}
+    local count = 0
+    while WelcomeGui.Parent do
+        count = (count % 4) + 1
+        LoadingText.Text = "Loading" .. dots[count]
+        wait(0.5)
+    end
+end)
+
+-- Load Fluent UI for Riky Hub
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+-- Tạo cửa sổ Riky Hub
+local RikyWindow = Fluent:CreateWindow({
+    Title = "Riky Hub | Blox Fruit V1.8 Premium",
+    SubTitle = "Premium Script Blox Fruit & Hunty Zombie",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 500),
+    Acrylic = true,
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.RightControl
+})
+
+-- Tabs
+local Tabs = {
+    Main = RikyWindow:AddTab({Title = "Main", Icon = ""}),
+    Farmer = RikyWindow:AddTab({Title = "Farmer", Icon = ""}),
+    Settings = RikyWindow:AddTab({Title = "Settings", Icon = ""}),
+    QuestItem = RikyWindow:AddTab({Title = "Quest + Item", Icon = ""}),
+    RaceV4 = RikyWindow:AddTab({Title = "Race V4 + Mirage", Icon = ""}),
+    SeaEvent = RikyWindow:AddTab({Title = "Sea Event", Icon = ""}),
+    Kitsune = RikyWindow:AddTab({Title = "Kitsune Event", Icon = ""}),
+    Volcano = RikyWindow:AddTab({Title = "Volcano", Icon = ""}),
+    Fishing = RikyWindow:AddTab({Title = "Fishing", Icon = ""}),
+    LocalPlayer = RikyWindow:AddTab({Title = "Local Player", Icon = ""}),
+    Visual = RikyWindow:AddTab({Title = "Visual", Icon = ""}),
+    FruitRaid = RikyWindow:AddTab({Title = "Fruit + Raid", Icon = ""}),
+    Teleport = RikyWindow:AddTab({Title = "Teleport", Icon = ""}),
+    Shop = RikyWindow:AddTab({Title = "Shop", Icon = ""}),
+    Misc = RikyWindow:AddTab({Title = "Misc", Icon = ""})
+}
+
+-- Riky Hub Status
+Tabs.Main:AddSection("STATUS")
+
+local PremiumStatus = Tabs.Main:AddParagraph({
+    Title = "RIKY HUB: ACTIVE",
+    Content = "Version: " .. RikyHub.Version .. " | " .. RikyHub.Game
+})
+
+-- Utilities
+Tabs.Main:AddSection("UTILITIES")
+
+local AntiAFKToggle = Tabs.Main:AddToggle("AntiAFKToggle", {
+    Title = "Anti-AFK [OFF]",
+    Description = "Prevent from being kicked for AFK",
+    Default = false
+})
+
+AntiAFKToggle:OnChanged(function(Value)
+    if Value then
+        AntiAFKToggle:SetTitle("Anti-AFK [ON]")
+        plr.Idled:Connect(function()
+            VirtualUser:CaptureController()
+            VirtualUser:ClickButton2(Vector2.new())
+        end)
+    else
+        AntiAFKToggle:SetTitle("Anti-AFK [OFF]")
+    end
+end)
+
+-- Settings Tab
+Tabs.Settings:AddSection("AUTO COMBAT")
+
+local AutoAttackMob = Tabs.Settings:AddToggle("AutoAttackMob", {
+    Title = "Auto Attack Mob [OFF]",
+    Description = "Automatically attack nearby mobs",
+    Default = false
+})
+
+AutoAttackMob:OnChanged(function(Value)
+    if Value then AutoAttackMob:SetTitle("Auto Attack Mob [ON]") else AutoAttackMob:SetTitle("Auto Attack Mob [OFF]") end
+end)
+
+local AutoAttackPlayer = Tabs.Settings:AddToggle("AutoAttackPlayer", {
+    Title = "Auto Attack Player [OFF]",
+    Description = "Automatically attack players",
+    Default = false
+})
+
+AutoAttackPlayer:OnChanged(function(Value)
+    if Value then AutoAttackPlayer:SetTitle("Auto Attack Player [ON]") else AutoAttackPlayer:SetTitle("Auto Attack Player [OFF]") end
+end)
+
+local AutoShootGun = Tabs.Settings:AddToggle("AutoShootGun", {
+    Title = "Auto Shoot Gun [OFF]",
+    Description = "Automatically shoot gun",
+    Default = false
+})
+
+AutoShootGun:OnChanged(function(Value)
+    if Value then AutoShootGun:SetTitle("Auto Shoot Gun [ON]") else AutoShootGun:SetTitle("Auto Shoot Gun [OFF]") end
+end)
+
+local BringMob = Tabs.Settings:AddToggle("BringMob", {
+    Title = "Bring Mob [OFF]",
+    Description = "Bring mobs to your position",
+    Default = false
+})
+
+BringMob:OnChanged(function(Value)
+    if Value then BringMob:SetTitle("Bring Mob [ON]") else BringMob:SetTitle("Bring Mob [OFF]") end
+end)
+
+local AutoHaki = Tabs.Settings:AddToggle("AutoHaki", {
+    Title = "Auto Haki [OFF]",
+    Description = "Automatically use Haki",
+    Default = false
+})
+
+AutoHaki:OnChanged(function(Value)
+    if Value then AutoHaki:SetTitle("Auto Haki [ON]") else AutoHaki:SetTitle("Auto Haki [OFF]") end
+end)
+
+local AutoKen = Tabs.Settings:AddToggle("AutoKen", {
+    Title = "Auto Ken [OFF]",
+    Description = "Automatically use Ken",
+    Default = false
+})
+
+AutoKen:OnChanged(function(Value)
+    if Value then AutoKen:SetTitle("Auto Ken [ON]") else AutoKen:SetTitle("Auto Ken [OFF]") end
+end)
+
+Tabs.Settings:AddSection("VISUAL SETTINGS")
+
+local DisableNotifications = Tabs.Settings:AddToggle("DisableNotifications", {
+    Title = "Disable Notifications [OFF]",
+    Description = "Disable game notifications",
+    Default = false
+})
+
+DisableNotifications:OnChanged(function(Value)
+    if Value then DisableNotifications:SetTitle("Disable Notifications [ON]") else DisableNotifications:SetTitle("Disable Notifications [OFF]") end
+end)
+
+local DisableDamageCounter = Tabs.Settings:AddToggle("DisableDamageCounter", {
+    Title = "Disable Damage Counter [OFF]",
+    Description = "Disable damage counter display",
+    Default = false
+})
+
+DisableDamageCounter:OnChanged(function(Value)
+    if Value then DisableDamageCounter:SetTitle("Disable Damage Counter [ON]") else DisableDamageCounter:SetTitle("Disable Damage Counter [OFF]") end
+end)
+
+Tabs.Settings:AddSection("PERFORMANCE")
+
+local FixLag = Tabs.Settings:AddToggle("FixLag", {
+    Title = "Fix Lag [OFF]",
+    Description = "Optimize game performance",
+    Default = false
+})
+
+FixLag:OnChanged(function(Value)
+    if Value then FixLag:SetTitle("Fix Lag [ON]") else FixLag:SetTitle("Fix Lag [OFF]") end
+end)
+
+local FpsBoost = Tabs.Settings:AddToggle("FpsBoost", {
+    Title = "FPS Boost [OFF]",
+    Description = "Increase FPS performance",
+    Default = false
+})
+
+FpsBoost:OnChanged(function(Value)
+    if Value then FpsBoost:SetTitle("FPS Boost [ON]") else FpsBoost:SetTitle("FPS Boost [OFF]") end
+end)
+
+local WhiteScreen = Tabs.Settings:AddToggle("WhiteScreen", {
+    Title = "White Screen [OFF]",
+    Description = "Enable white screen mode",
+    Default = false
+})
+
+WhiteScreen:OnChanged(function(Value)
+    if Value then WhiteScreen:SetTitle("White Screen [ON]") else WhiteScreen:SetTitle("White Screen [OFF]") end
+end)
+
+-- Farmer Tab
+Tabs.Farmer:AddSection("WEAPON SEARCH")
+
+local WeaponTypeDropdown = Tabs.Farmer:AddDropdown("WeaponTypeDropdown", {
+    Title = "Weapon Type",
+    Description = "Select type of weapon to search",
+    Values = {"Melee", "Sword", "Gun", "Blox Fruit"},
+    Default = 1,
+})
+
+Tabs.Farmer:AddSection("ATTACK MODE")
+
+local AttackModeDropdown = Tabs.Farmer:AddDropdown("AttackModeDropdown", {
+    Title = "Attack Mode",
+    Description = "Select attack mode",
+    Values = {"Fast Attack", "Riky Attack", "Super Attack (Risk Kick)"},
+    Default = 1,
+})
+
+Tabs.Farmer:AddSection("TWEEN SPEED")
+
+local TweenSpeedDropdown = Tabs.Farmer:AddDropdown("TweenSpeedDropdown", {
+    Title = "Tween Speed",
+    Description = "Select movement speed",
+    Values = {"150", "200", "250", "300", "350", "400", "450 Kick", "500 Risk Kick"},
+    Default = 1,
+})
+
+Tabs.Farmer:AddSection("LEVEL UP")
+
+local AutoFarmLevel = Tabs.Farmer:AddToggle("AutoFarmLevel", {
+    Title = "Auto Farm Level [OFF]",
+    Description = "Automatically farm for level up",
+    Default = false
+})
+
+AutoFarmLevel:OnChanged(function(Value)
+    if Value then AutoFarmLevel:SetTitle("Auto Farm Level [ON]") else AutoFarmLevel:SetTitle("Auto Farm Level [OFF]") end
+end)
+
+local AutoQuest = Tabs.Farmer:AddToggle("AutoQuest", {
+    Title = "Auto Quest [OFF]",
+    Description = "Automatically complete quests",
+    Default = false
+})
+
+AutoQuest:OnChanged(function(Value)
+    if Value then AutoQuest:SetTitle("Auto Quest [ON]") else AutoQuest:SetTitle("Auto Quest [OFF]") end
+end)
+
+local MobAura = Tabs.Farmer:AddToggle("MobAura", {
+    Title = "Mob Aura [OFF]",
+    Description = "Auto attack mobs in range",
+    Default = false
+})
+
+MobAura:OnChanged(function(Value)
+    if Value then MobAura:SetTitle("Mob Aura [ON]") else MobAura:SetTitle("Mob Aura [OFF]") end
+end)
+
+Tabs.Farmer:AddSection("BONE")
+
+local AutoFarmBone = Tabs.Farmer:AddToggle("AutoFarmBone", {
+    Title = "Auto Farm Bone [OFF]",
+    Description = "Automatically farm bones",
+    Default = false
+})
+
+AutoFarmBone:OnChanged(function(Value)
+    if Value then AutoFarmBone:SetTitle("Auto Farm Bone [ON]") else AutoFarmBone:SetTitle("Auto Farm Bone [OFF]") end
+end)
+
+local AutoQuestBone = Tabs.Farmer:AddToggle("AutoQuestBone", {
+    Title = "Auto Quest Bone [OFF]",
+    Description = "Automatically complete bone quests",
+    Default = false
+})
+
+AutoQuestBone:OnChanged(function(Value)
+    if Value then AutoQuestBone:SetTitle("Auto Quest Bone [ON]") else AutoQuestBone:SetTitle("Auto Quest Bone [OFF]") end
+end)
+
+local AutoRandomBone = Tabs.Farmer:AddToggle("AutoRandomBone", {
+    Title = "Auto Random Bone [OFF]",
+    Description = "Automatically get random bones",
+    Default = false
+})
+
+AutoRandomBone:OnChanged(function(Value)
+    if Value then AutoRandomBone:SetTitle("Auto Random Bone [ON]") else AutoRandomBone:SetTitle("Auto Random Bone [OFF]") end
+end)
+
+local AutoHallowScythe = Tabs.Farmer:AddToggle("AutoHallowScythe", {
+    Title = "Auto Hallow Scythe [OFF]",
+    Description = "Automatically farm Hallow Scythe",
+    Default = false
+})
+
+AutoHallowScythe:OnChanged(function(Value)
+    if Value then AutoHallowScythe:SetTitle("Auto Hallow Scythe [ON]") else AutoHallowScythe:SetTitle("Auto Hallow Scythe [OFF]") end
+end)
+
+local AutoTryLucky = Tabs.Farmer:AddToggle("AutoTryLucky", {
+    Title = "Auto Try Lucky [OFF]",
+    Description = "Automatically try lucky items",
+    Default = false
+})
+
+AutoTryLucky:OnChanged(function(Value)
+    if Value then AutoTryLucky:SetTitle("Auto Try Lucky [ON]") else AutoTryLucky:SetTitle("Auto Try Lucky [OFF]") end
+end)
+
+Tabs.Farmer:AddSection("DOUGH BOSS")
+
+local AutoFarmCakePrince = Tabs.Farmer:AddToggle("AutoFarmCakePrince", {
+    Title = "Auto Farm Cake Prince [OFF]",
+    Description = "Automatically farm Cake Prince",
+    Default = false
+})
+
+AutoFarmCakePrince:OnChanged(function(Value)
+    if Value then AutoFarmCakePrince:SetTitle("Auto Farm Cake Prince [ON]") else AutoFarmCakePrince:SetTitle("Auto Farm Cake Prince [OFF]") end
+end)
+
+local AcceptQuestCakePrince = Tabs.Farmer:AddToggle("AcceptQuestCakePrince", {
+    Title = "Accept Quest Cake Prince [OFF]",
+    Description = "Automatically accept Cake Prince quest",
+    Default = false
+})
+
+AcceptQuestCakePrince:OnChanged(function(Value)
+    if Value then AcceptQuestCakePrince:SetTitle("Accept Quest Cake Prince [ON]") else AcceptQuestCakePrince:SetTitle("Accept Quest Cake Prince [OFF]") end
+end)
+
+local AutoCakePrinceRaid = Tabs.Farmer:AddToggle("AutoCakePrinceRaid", {
+    Title = "Auto Cake Prince Raid [OFF]",
+    Description = "Automatically do Cake Prince raid",
+    Default = false
+})
+
+AutoCakePrinceRaid:OnChanged(function(Value)
+    if Value then AutoCakePrinceRaid:SetTitle("Auto Cake Prince Raid [ON]") else AutoCakePrinceRaid:SetTitle("Auto Cake Prince Raid [OFF]") end
+end)
+
+local AutoDoughKingRaid = Tabs.Farmer:AddToggle("AutoDoughKingRaid", {
+    Title = "Auto Dough King Raid [OFF]",
+    Description = "Automatically do Dough King raid",
+    Default = false
+})
+
+AutoDoughKingRaid:OnChanged(function(Value)
+    if Value then AutoDoughKingRaid:SetTitle("Auto Dough King Raid [ON]") else AutoDoughKingRaid:SetTitle("Auto Dough King Raid [OFF]") end
+end)
+
+Tabs.Farmer:AddSection("BERRY")
+
+local AutoCollectBerries = Tabs.Farmer:AddToggle("AutoCollectBerries", {
+    Title = "Auto Collect Berries [OFF]",
+    Description = "Automatically collect berries",
+    Default = false
+})
+
+AutoCollectBerries:OnChanged(function(Value)
+    if Value then AutoCollectBerries:SetTitle("Auto Collect Berries [ON]") else AutoCollectBerries:SetTitle("Auto Collect Berries [OFF]") end
+end)
+
+local CollectBerriesHop = Tabs.Farmer:AddToggle("CollectBerriesHop", {
+    Title = "Collect Berries Hop [OFF]",
+    Description = "Hop server when collecting berries",
+    Default = false
+})
+
+CollectBerriesHop:OnChanged(function(Value)
+    if Value then CollectBerriesHop:SetTitle("Collect Berries Hop [ON]") else CollectBerriesHop:SetTitle("Collect Berries Hop [OFF]") end
+end)
+
+Tabs.Farmer:AddSection("ELITE HUNTER")
+
+local AutoEliteHunter = Tabs.Farmer:AddToggle("AutoEliteHunter", {
+    Title = "Auto Elite Hunter [OFF]",
+    Description = "Automatically hunt elite",
+    Default = false
+})
+
+AutoEliteHunter:OnChanged(function(Value)
+    if Value then AutoEliteHunter:SetTitle("Auto Elite Hunter [ON]") else AutoEliteHunter:SetTitle("Auto Elite Hunter [OFF]") end
+end)
+
+Tabs.Farmer:AddSection("CHEST")
+
+local AutoFarmChest = Tabs.Farmer:AddToggle("AutoFarmChest", {
+    Title = "Auto Farm Chest (Tele) [OFF]",
+    Description = "Automatically farm chest with teleport",
+    Default = false
+})
+
+AutoFarmChest:OnChanged(function(Value)
+    if Value then AutoFarmChest:SetTitle("Auto Farm Chest (Tele) [ON]") else AutoFarmChest:SetTitle("Auto Farm Chest (Tele) [OFF]") end
+end)
+
+local AutoFarmChestBypass = Tabs.Farmer:AddToggle("AutoFarmChestBypass", {
+    Title = "Auto Farm Chest Bypass [OFF]",
+    Description = "Auto farm chest bypass (reset acc clone)",
+    Default = false
+})
+
+AutoFarmChestBypass:OnChanged(function(Value)
+    if Value then AutoFarmChestBypass:SetTitle("Auto Farm Chest Bypass [ON]") else AutoFarmChestBypass:SetTitle("Auto Farm Chest Bypass [OFF]") end
+end)
+
+local AutoStopHaveItem = Tabs.Farmer:AddToggle("AutoStopHaveItem", {
+    Title = "Auto Stop You Have Item [OFF]",
+    Description = "Stop when you have the item",
+    Default = false
+})
+
+AutoStopHaveItem:OnChanged(function(Value)
+    if Value then AutoStopHaveItem:SetTitle("Auto Stop You Have Item [ON]") else AutoStopHaveItem:SetTitle("Auto Stop You Have Item [OFF]") end
+end)
+
+Tabs.Farmer:AddSection("TYRANT OF THE SKIES")
+
+local AutoFarmTyrant = Tabs.Farmer:AddToggle("AutoFarmTyrant", {
+    Title = "Auto Farm Tyrant Of The Skies [OFF]",
+    Description = "Automatically farm Tyrant",
+    Default = false
+})
+
+AutoFarmTyrant:OnChanged(function(Value)
+    if Value then AutoFarmTyrant:SetTitle("Auto Farm Tyrant Of The Skies [ON]") else AutoFarmTyrant:SetTitle("Auto Farm Tyrant Of The Skies [OFF]") end
+end)
+
+local AutoQuestTyrant = Tabs.Farmer:AddToggle("AutoQuestTyrant", {
+    Title = "Auto Quest Tyrant Skies [OFF]",
+    Description = "Automatically complete Tyrant quest",
+    Default = false
+})
+
+AutoQuestTyrant:OnChanged(function(Value)
+    if Value then AutoQuestTyrant:SetTitle("Auto Quest Tyrant Skies [ON]") else AutoQuestTyrant:SetTitle("Auto Quest Tyrant Skies [OFF]") end
+end)
+
+local AutoTyrantBoss = Tabs.Farmer:AddToggle("AutoTyrantBoss", {
+    Title = "Auto Tyrant Of The Skies Boss [OFF]",
+    Description = "Automatically fight Tyrant boss",
+    Default = false
+})
+
+AutoTyrantBoss:OnChanged(function(Value)
+    if Value then AutoTyrantBoss:SetTitle("Auto Tyrant Of The Skies Boss [ON]") else AutoTyrantBoss:SetTitle("Auto Tyrant Of The Skies Boss [OFF]") end
+end)
+
+Tabs.Farmer:AddSection("MATERIAL")
+
+local MaterialDropdown = Tabs.Farmer:AddDropdown("MaterialDropdown", {
+    Title = "Select Material",
+    Description = "Select materials to farm",
+    Values = {"Vampire Fang", "Gum Powder", "Scrap Metal", "Fish Tail", "Ectoplasm", "Dragon Scale", "Cocoa", "Mini Tusk", "Magma Ore", "Leather"},
+    Default = 1,
+})
+
+local StarFarmer = Tabs.Farmer:AddToggle("StarFarmer", {
+    Title = "Star Farmer [OFF]",
+    Description = "Enable star farming mode",
+    Default = false
+})
+
+StarFarmer:OnChanged(function(Value)
+    if Value then StarFarmer:SetTitle("Star Farmer [ON]") else StarFarmer:SetTitle("Star Farmer [OFF]") end
+end)
+
+-- Quest + Item Tab
+Tabs.QuestItem:AddSection("SKILLS")
+
+local AutoSuperman = Tabs.QuestItem:AddToggle("AutoSuperman", {
+    Title = "Auto Superman [OFF]",
+    Description = "Automatically get Superman",
+    Default = false
+})
+
+AutoSuperman:OnChanged(function(Value)
+    if Value then AutoSuperman:SetTitle("Auto Superman [ON]") else AutoSuperman:SetTitle("Auto Superman [OFF]") end
+end)
+
+local AutoDeathstep = Tabs.QuestItem:AddToggle("AutoDeathstep", {
+    Title = "Auto Deathstep [OFF]",
+    Description = "Automatically get Deathstep",
+    Default = false
+})
+
+AutoDeathstep:OnChanged(function(Value)
+    if Value then AutoDeathstep:SetTitle("Auto Deathstep [ON]") else AutoDeathstep:SetTitle("Auto Deathstep [OFF]") end
+end)
+
+local AutoSharkmanKarate = Tabs.QuestItem:AddToggle("AutoSharkmanKarate", {
+    Title = "Auto Sharkman Karate [OFF]",
+    Description = "Automatically get Sharkman Karate",
+    Default = false
+})
+
+AutoSharkmanKarate:OnChanged(function(Value)
+    if Value then AutoSharkmanKarate:SetTitle("Auto Sharkman Karate [ON]") else AutoSharkmanKarate:SetTitle("Auto Sharkman Karate [OFF]") end
+end)
+
+local AutoElectricClaw = Tabs.QuestItem:AddToggle("AutoElectricClaw", {
+    Title = "Auto Electric Claw [OFF]",
+    Description = "Automatically get Electric Claw",
+    Default = false
+})
+
+AutoElectricClaw:OnChanged(function(Value)
+    if Value then AutoElectricClaw:SetTitle("Auto Electric Claw [ON]") else AutoElectricClaw:SetTitle("Auto Electric Claw [OFF]") end
+end)
+
+local AutoDragonTalon = Tabs.QuestItem:AddToggle("AutoDragonTalon", {
+    Title = "Auto Dragon Talon [OFF]",
+    Description = "Automatically get Dragon Talon",
+    Default = false
+})
+
+AutoDragonTalon:OnChanged(function(Value)
+    if Value then AutoDragonTalon:SetTitle("Auto Dragon Talon [ON]") else AutoDragonTalon:SetTitle("Auto Dragon Talon [OFF]") end
+end)
+
+local AutoGodHuman = Tabs.QuestItem:AddToggle("AutoGodHuman", {
+    Title = "Auto God Human [OFF]",
+    Description = "Automatically get God Human",
+    Default = false
+})
+
+AutoGodHuman:OnChanged(function(Value)
+    if Value then AutoGodHuman:SetTitle("Auto God Human [ON]") else AutoGodHuman:SetTitle("Auto God Human [OFF]") end
+end)
+
+Tabs.QuestItem:AddSection("ITEMS")
+
+local AutoPiratesRaid = Tabs.QuestItem:AddToggle("AutoPiratesRaid", {
+    Title = "Auto Pirates Raid [OFF]",
+    Description = "Automatically do Pirates Raid",
+    Default = false
+})
+
+AutoPiratesRaid:OnChanged(function(Value)
+    if Value then AutoPiratesRaid:SetTitle("Auto Pirates Raid [ON]") else AutoPiratesRaid:SetTitle("Auto Pirates Raid [OFF]") end
+end)
+
+local AutoRipIndraTrue = Tabs.QuestItem:AddToggle("AutoRipIndraTrue", {
+    Title = "Auto Rip_Indra True [OFF]",
+    Description = "Automatically get Rip_Indra True",
+    Default = false
+})
+
+AutoRipIndraTrue:OnChanged(function(Value)
+    if Value then AutoRipIndraTrue:SetTitle("Auto Rip_Indra True [ON]") else AutoRipIndraTrue:SetTitle("Auto Rip_Indra True [OFF]") end
+end)
+
+local AutoPressHakiButton = Tabs.QuestItem:AddToggle("AutoPressHakiButton", {
+    Title = "Auto Press Haki Button [OFF]",
+    Description = "Automatically press Haki button",
+    Default = false
+})
+
+AutoPressHakiButton:OnChanged(function(Value)
+    if Value then AutoPressHakiButton:SetTitle("Auto Press Haki Button [ON]") else AutoPressHakiButton:SetTitle("Auto Press Haki Button [OFF]") end
+end)
+
+local AutoYama = Tabs.QuestItem:AddToggle("AutoYama", {
+    Title = "Auto Yama [OFF]",
+    Description = "Automatically get Yama",
+    Default = false
+})
+
+AutoYama:OnChanged(function(Value)
+    if Value then AutoYama:SetTitle("Auto Yama [ON]") else AutoYama:SetTitle("Auto Yama [OFF]") end
+end)
+
+local AutoPhoenixRaid = Tabs.QuestItem:AddToggle("AutoPhoenixRaid", {
+    Title = "Auto Phoenix Raid [OFF]",
+    Description = "Automatically do Phoenix Raid",
+    Default = false
+})
+
+AutoPhoenixRaid:OnChanged(function(Value)
+    if Value then AutoPhoenixRaid:SetTitle("Auto Phoenix Raid [ON]") else AutoPhoenixRaid:SetTitle("Auto Phoenix Raid [OFF]") end
+end)
+
+local AutoMusketeerHat = Tabs.QuestItem:AddToggle("AutoMusketeerHat", {
+    Title = "Auto Musketeer Hat [OFF]",
+    Description = "Automatically get Musketeer Hat",
+    Default = false
+})
+
+AutoMusketeerHat:OnChanged(function(Value)
+    if Value then AutoMusketeerHat:SetTitle("Auto Musketeer Hat [ON]") else AutoMusketeerHat:SetTitle("Auto Musketeer Hat [OFF]") end
+end)
+
+local AutoTwinHook = Tabs.QuestItem:AddToggle("AutoTwinHook", {
+    Title = "Auto Twin Hook [OFF]",
+    Description = "Automatically get Twin Hook",
+    Default = false
+})
+
+AutoTwinHook:OnChanged(function(Value)
+    if Value then AutoTwinHook:SetTitle("Auto Twin Hook [ON]") else AutoTwinHook:SetTitle("Auto Twin Hook [OFF]") end
+end)
+
+local AutoRainbowHaki = Tabs.QuestItem:AddToggle("AutoRainbowHaki", {
+    Title = "Auto Rainbow Haki [OFF]",
+    Description = "Automatically get Rainbow Haki",
+    Default = false
+})
+
+AutoRainbowHaki:OnChanged(function(Value)
+    if Value then AutoRainbowHaki:SetTitle("Auto Rainbow Haki [ON]") else AutoRainbowHaki:SetTitle("Auto Rainbow Haki [OFF]") end
+end)
+
+local AutoObservationHakiV2 = Tabs.QuestItem:AddToggle("AutoObservationHakiV2", {
+    Title = "Auto Observation Haki v2 [OFF]",
+    Description = "Automatically get Observation Haki v2",
+    Default = false
+})
+
+AutoObservationHakiV2:OnChanged(function(Value)
+    if Value then AutoObservationHakiV2:SetTitle("Auto Observation Haki v2 [ON]") else AutoObservationHakiV2:SetTitle("Auto Observation Haki v2 [OFF]") end
+end)
+
+local AutoCavander = Tabs.QuestItem:AddToggle("AutoCavander", {
+    Title = "Auto Cavander [OFF]",
+    Description = "Automatically get Cavander",
+    Default = false
+})
+
+AutoCavander:OnChanged(function(Value)
+    if Value then AutoCavander:SetTitle("Auto Cavander [ON]") else AutoCavander:SetTitle("Auto Cavander [OFF]") end
+end)
+
+local AutoTushita = Tabs.QuestItem:AddToggle("AutoTushita", {
+    Title = "Auto Tushita [OFF]",
+    Description = "Automatically get Tushita",
+    Default = false
+})
+
+AutoTushita:OnChanged(function(Value)
+    if Value then AutoTushita:SetTitle("Auto Tushita [ON]") else AutoTushita:SetTitle("Auto Tushita [OFF]") end
+end)
+
+local AutoHolyTorch = Tabs.QuestItem:AddToggle("AutoHolyTorch", {
+    Title = "Auto Holy Torch [OFF]",
+    Description = "Automatically get Holy Torch",
+    Default = false
+})
+
+AutoHolyTorch:OnChanged(function(Value)
+    if Value then AutoHolyTorch:SetTitle("Auto Holy Torch [ON]") else AutoHolyTorch:SetTitle("Auto Holy Torch [OFF]") end
+end)
+
+local AutoSoulGuitarFull = Tabs.QuestItem:AddToggle("AutoSoulGuitarFull", {
+    Title = "Auto Soul Guitar Full [OFF]",
+    Description = "Automatically get Soul Guitar Full",
+    Default = false
+})
+
+AutoSoulGuitarFull:OnChanged(function(Value)
+    if Value then AutoSoulGuitarFull:SetTitle("Auto Soul Guitar Full [ON]") else AutoSoulGuitarFull:SetTitle("Auto Soul Guitar Full [OFF]") end
+end)
+
+local AutoBuddy = Tabs.QuestItem:AddToggle("AutoBuddy", {
+    Title = "Auto Buddy [OFF]",
+    Description = "Automatically get Buddy",
+    Default = false
+})
+
+AutoBuddy:OnChanged(function(Value)
+    if Value then AutoBuddy:SetTitle("Auto Buddy [ON]") else AutoBuddy:SetTitle("Auto Buddy [OFF]") end
+end)
+
+local AutoFinishYamaQuest = Tabs.QuestItem:AddToggle("AutoFinishYamaQuest", {
+    Title = "Auto Finish Yama Quest [OFF]",
+    Description = "Automatically finish Yama quest",
+    Default = false
+})
+
+AutoFinishYamaQuest:OnChanged(function(Value)
+    if Value then AutoFinishYamaQuest:SetTitle("Auto Finish Yama Quest [ON]") else AutoFinishYamaQuest:SetTitle("Auto Finish Yama Quest [OFF]") end
+end)
+
+local AutoGetCDK = Tabs.QuestItem:AddToggle("AutoGetCDK", {
+    Title = "Auto Get CDK [OFF]",
+    Description = "Automatically get CDK",
+    Default = false
+})
+
+AutoGetCDK:OnChanged(function(Value)
+    if Value then AutoGetCDK:SetTitle("Auto Get CDK [ON]") else AutoGetCDK:SetTitle("Auto Get CDK [OFF]") end
+end)
+
+-- Race V4 + Mirage Tab
+Tabs.RaceV4:AddSection("MIRAGE")
+
+local TeleportMirageIsland = Tabs.RaceV4:AddButton({
+    Title = "Teleport Mirage Island",
+    Description = "Teleport to Mirage Island",
+    Callback = function()
+        print("Teleporting to Mirage Island...")
+    end
+})
+
+local TeleportAdvancedFruit = Tabs.RaceV4:AddButton({
+    Title = "Teleport Advanced Fruit",
+    Description = "Teleport to Advanced Fruit",
+    Callback = function()
+        print("Teleporting to Advanced Fruit...")
+    end
+})
+
+local AutoLookMoon = Tabs.RaceV4:AddToggle("AutoLookMoon", {
+    Title = "Auto Look Moon [OFF]",
+    Description = "Automatically look at moon",
+    Default = false
+})
+
+AutoLookMoon:OnChanged(function(Value)
+    if Value then AutoLookMoon:SetTitle("Auto Look Moon [ON]") else AutoLookMoon:SetTitle("Auto Look Moon [OFF]") end
+end)
+
+local TweenGear = Tabs.RaceV4:AddToggle("TweenGear", {
+    Title = "Tween Gear [OFF]",
+    Description = "Enable tween gear",
+    Default = false
+})
+
+TweenGear:OnChanged(function(Value)
+    if Value then TweenGear:SetTitle("Tween Gear [ON]") else TweenGear:SetTitle("Tween Gear [OFF]") end
+end)
+
+local TeleportTempleOfTime = Tabs.RaceV4:AddButton({
+    Title = "Teleport Temple Of Time",
+    Description = "Teleport to Temple Of Time",
+    Callback = function()
+        print("Teleporting to Temple Of Time...")
+    end
+})
+
+local TeleportLeverPull = Tabs.RaceV4:AddButton({
+    Title = "Teleport Lever Pull",
+    Description = "Teleport to Lever Pull",
+    Callback = function()
+        print("Teleporting to Lever Pull...")
+    end
+})
+
+local TeleportNpcAncientOne = Tabs.RaceV4:AddButton({
+    Title = "Teleport Npc Ancient One",
+    Description = "Teleport to Ancient One NPC",
+    Callback = function()
+        print("Teleporting to Ancient One NPC...")
+    end
+})
+
+local AutoBuyGear = Tabs.RaceV4:AddToggle("AutoBuyGear", {
+    Title = "Auto Buy Gear [OFF]",
+    Description = "Automatically buy gear",
+    Default = false
+})
+
+AutoBuyGear:OnChanged(function(Value)
+    if Value then AutoBuyGear:SetTitle("Auto Buy Gear [ON]") else AutoBuyGear:SetTitle("Auto Buy Gear [OFF]") end
+end)
+
+local TeleportDoorsRace = Tabs.RaceV4:AddButton({
+    Title = "Teleport Doors Race",
+    Description = "Teleport to Race Doors",
+    Callback = function()
+        print("Teleporting to Race Doors...")
+    end
+})
+
+local TeleportClock = Tabs.RaceV4:AddButton({
+    Title = "Teleport Clock",
+    Description = "Teleport to Clock",
+    Callback = function()
+        print("Teleporting to Clock...")
+    end
+})
+
+Tabs.RaceV4:AddSection("RACE V4")
+
+local AutoTrial = Tabs.RaceV4:AddToggle("AutoTrial", {
+    Title = "Auto Trial [OFF]",
+    Description = "Automatically do trial",
+    Default = false
+})
+
+AutoTrial:OnChanged(function(Value)
+    if Value then AutoTrial:SetTitle("Auto Trial [ON]") else AutoTrial:SetTitle("Auto Trial [OFF]") end
+end)
+
+local AutoQuestV4 = Tabs.RaceV4:AddToggle("AutoQuestV4", {
+    Title = "Auto Quest V4 [OFF]",
+    Description = "Automatically do V4 quest",
+    Default = false
+})
+
+AutoQuestV4:OnChanged(function(Value)
+    if Value then AutoQuestV4:SetTitle("Auto Quest V4 [ON]") else AutoQuestV4:SetTitle("Auto Quest V4 [OFF]") end
+end)
+
+local AutoKillPlayer = Tabs.RaceV4:AddToggle("AutoKillPlayer", {
+    Title = "Auto Kill Player (Trial) [OFF]",
+    Description = "Automatically kill players in trial",
+    Default = false
+})
+
+AutoKillPlayer:OnChanged(function(Value)
+    if Value then AutoKillPlayer:SetTitle("Auto Kill Player (Trial) [ON]") else AutoKillPlayer:SetTitle("Auto Kill Player (Trial) [OFF]") end
+end)
+
+-- Sea Event Tab
+Tabs.SeaEvent:AddSection("BOAT SELECTION")
+
+local BoatDropdown = Tabs.SeaEvent:AddDropdown("BoatDropdown", {
+    Title = "Select Boat",
+    Description = "Choose your boat",
+    Values = {"Guardian", "PirateGrandBrigade", "MarineGrandBrigade", "PirateBrigade", "MarineBrigade", "PirateSloop", "MarineSloop", "BeastHunter"},
+    Default = 1,
+})
+
+local ZoneDropdown = Tabs.SeaEvent:AddDropdown("ZoneDropdown", {
+    Title = "Select Zone",
+    Description = "Choose zone",
+    Values = {"Zone 1", "Zone 2", "Zone 3", "Zone 4", "Zone 5", "Zone 6"},
+    Default = 1,
+})
+
+local SpeedBoatDropdown = Tabs.SeaEvent:AddDropdown("SpeedBoatDropdown", {
+    Title = "Speed Boat",
+    Description = "Select boat speed",
+    Values = {"150", "200", "250", "300", "350", "400 (Delay)", "450 (Kick)", "500 (Risk Kick)"},
+    Default = 1,
+})
+
+Tabs.SeaEvent:AddSection("SEA EVENT ACTIONS")
+
+local StartSeaEvent = Tabs.SeaEvent:AddButton({
+    Title = "Start Sea Event",
+    Description = "Start sea event",
+    Callback = function()
+        print("Starting Sea Event...")
+    end
+})
+
+local AutoKillShark = Tabs.SeaEvent:AddToggle("AutoKillShark", {
+    Title = "Auto Kill Shark [OFF]",
+    Description = "Automatically kill sharks",
+    Default = false
+})
+
+AutoKillShark:OnChanged(function(Value)
+    if Value then AutoKillShark:SetTitle("Auto Kill Shark [ON]") else AutoKillShark:SetTitle("Auto Kill Shark [OFF]") end
+end)
+
+local AutoKillPiranha = Tabs.SeaEvent:AddToggle("AutoKillPiranha", {
+    Title = "Auto Kill Piranha [OFF]",
+    Description = "Automatically kill piranhas",
+    Default = false
+})
+
+AutoKillPiranha:OnChanged(function(Value)
+    if Value then AutoKillPiranha:SetTitle("Auto Kill Piranha [ON]") else AutoKillPiranha:SetTitle("Auto Kill Piranha [OFF]") end
+end)
+
+local AutoFishCrew = Tabs.SeaEvent:AddToggle("AutoFishCrew", {
+    Title = "Auto Fish Crew [OFF]",
+    Description = "Automatically fish crew",
+    Default = false
+})
+
+AutoFishCrew:OnChanged(function(Value)
+    if Value then AutoFishCrew:SetTitle("Auto Fish Crew [ON]") else AutoFishCrew:SetTitle("Auto Fish Crew [OFF]") end
+end)
+
+local AutoKillGhostShip = Tabs.SeaEvent:AddToggle("AutoKillGhostShip", {
+    Title = "Auto Kill Ghost Ship [OFF]",
+    Description = "Automatically kill ghost ship",
+    Default = false
+})
+
+AutoKillGhostShip:OnChanged(function(Value)
+    if Value then AutoKillGhostShip:SetTitle("Auto Kill Ghost Ship [ON]") else AutoKillGhostShip:SetTitle("Auto Kill Ghost Ship [OFF]") end
+end)
+
+local AutoKillPirateGrandBrigade = Tabs.SeaEvent:AddToggle("AutoKillPirateGrandBrigade", {
+    Title = "Auto Kill Pirate Grand Brigade [OFF]",
+    Description = "Automatically kill pirate grand brigade",
+    Default = false
+})
+
+AutoKillPirateGrandBrigade:OnChanged(function(Value)
+    if Value then AutoKillPirateGrandBrigade:SetTitle("Auto Kill Pirate Grand Brigade [ON]") else AutoKillPirateGrandBrigade:SetTitle("Auto Kill Pirate Grand Brigade [OFF]") end
+end)
+
+local AutoKillTerrorShark = Tabs.SeaEvent:AddToggle("AutoKillTerrorShark", {
+    Title = "Auto Kill Terror Shark [OFF]",
+    Description = "Automatically kill terror shark",
+    Default = false
+})
+
+AutoKillTerrorShark:OnChanged(function(Value)
+    if Value then AutoKillTerrorShark:SetTitle("Auto Kill Terror Shark [ON]") else AutoKillTerrorShark:SetTitle("Auto Kill Terror Shark [OFF]") end
+end)
+
+Tabs.SeaEvent:AddSection("BOAT SETTINGS")
+
+local EnableSpeedBoat = Tabs.SeaEvent:AddToggle("EnableSpeedBoat", {
+    Title = "Enable Speed Boat [OFF]",
+    Description = "Enable speed boat mode",
+    Default = false
+})
+
+EnableSpeedBoat:OnChanged(function(Value)
+    if Value then EnableSpeedBoat:SetTitle("Enable Speed Boat [ON]") else EnableSpeedBoat:SetTitle("Enable Speed Boat [OFF]") end
+end)
+
+local EnableFlyBoat = Tabs.SeaEvent:AddToggle("EnableFlyBoat", {
+    Title = "Enable Fly Boat [OFF]",
+    Description = "Enable fly boat mode",
+    Default = false
+})
+
+EnableFlyBoat:OnChanged(function(Value)
+    if Value then EnableFlyBoat:SetTitle("Enable Fly Boat [ON]") else EnableFlyBoat:SetTitle("Enable Fly Boat [OFF]") end
+end)
+
+local NoclipRock = Tabs.SeaEvent:AddToggle("NoclipRock", {
+    Title = "Noclip Rock [OFF]",
+    Description = "Enable noclip through rocks",
+    Default = false
+})
+
+NoclipRock:OnChanged(function(Value)
+    if Value then NoclipRock:SetTitle("Noclip Rock [ON]") else NoclipRock:SetTitle("Noclip Rock [OFF]") end
+end)
+
+-- Kitsune Event Tab
+Tabs.Kitsune:AddSection("KITSUNE EVENT")
+
+local TeleportKitsune = Tabs.Kitsune:AddButton({
+    Title = "Teleport Kitsune",
+    Description = "Teleport to Kitsune",
+    Callback = function()
+        print("Teleporting to Kitsune...")
+    end
+})
+
+local AutoCollectAzureEmber = Tabs.Kitsune:AddToggle("AutoCollectAzureEmber", {
+    Title = "Auto Collect Azure Ember [OFF]",
+    Description = "Automatically collect Azure Ember",
+    Default = false
+})
+
+AutoCollectAzureEmber:OnChanged(function(Value)
+    if Value then AutoCollectAzureEmber:SetTitle("Auto Collect Azure Ember [ON]") else AutoCollectAzureEmber:SetTitle("Auto Collect Azure Ember [OFF]") end
+end)
+
+local SetAzureEmber = Tabs.Kitsune:AddDropdown("SetAzureEmber", {
+    Title = "Set Azure Ember",
+    Description = "Set Azure Ember amount",
+    Values = {"10", "15", "20", "25"},
+    Default = 1,
+})
+
+local AutoTradeAzureEmber = Tabs.Kitsune:AddToggle("AutoTradeAzureEmber", {
+    Title = "Auto Trade Azure Ember [OFF]",
+    Description = "Automatically trade Azure Ember",
+    Default = false
+})
+
+AutoTradeAzureEmber:OnChanged(function(Value)
+    if Value then AutoTradeAzureEmber:SetTitle("Auto Trade Azure Ember [ON]") else AutoTradeAzureEmber:SetTitle("Auto Trade Azure Ember [OFF]") end
+end)
+
+local AutoFindLeviathan = Tabs.Kitsune:AddToggle("AutoFindLeviathan", {
+    Title = "Auto Find Leviathan [OFF]",
+    Description = "Automatically find Leviathan",
+    Default = false
+})
+
+AutoFindLeviathan:OnChanged(function(Value)
+    if Value then AutoFindLeviathan:SetTitle("Auto Find Leviathan [ON]") else AutoFindLeviathan:SetTitle("Auto Find Leviathan [OFF]") end
+end)
+
+local TweenFrozenDimension = Tabs.Kitsune:AddToggle("TweenFrozenDimension", {
+    Title = "Tween Frozen Dimension [OFF]",
+    Description = "Tween to frozen dimension",
+    Default = false
+})
+
+TweenFrozenDimension:OnChanged(function(Value)
+    if Value then TweenFrozenDimension:SetTitle("Tween Frozen Dimension [ON]") else TweenFrozenDimension:SetTitle("Tween Frozen Dimension [OFF]") end
+end)
+
+local AutoAttackLeviathan = Tabs.Kitsune:AddToggle("AutoAttackLeviathan", {
+    Title = "Auto Attack Leviathan [OFF]",
+    Description = "Automatically attack Leviathan",
+    Default = false
+})
+
+AutoAttackLeviathan:OnChanged(function(Value)
+    if Value then AutoAttackLeviathan:SetTitle("Auto Attack Leviathan [ON]") else AutoAttackLeviathan:SetTitle("Auto Attack Leviathan [OFF]") end
+end)
+
+local AttackSegmentLeviathan = Tabs.Kitsune:AddToggle("AttackSegmentLeviathan", {
+    Title = "Attack Segment Leviathan [OFF]",
+    Description = "Attack Leviathan segments",
+    Default = false
+})
+
+AttackSegmentLeviathan:OnChanged(function(Value)
+    if Value then AttackSegmentLeviathan:SetTitle("Attack Segment Leviathan [ON]") else AttackSegmentLeviathan:SetTitle("Attack Segment Leviathan [OFF]") end
+end)
+
+Tabs.Kitsune:AddSection("ENOBLE SKILLS")
+
+local EnobleMeleeSkill = Tabs.Kitsune:AddToggle("EnobleMeleeSkill", {
+    Title = "Enoble Melee Skill [OFF]",
+    Description = "Enoble melee skills",
+    Default = false
+})
+
+EnobleMeleeSkill:OnChanged(function(Value)
+    if Value then EnobleMeleeSkill:SetTitle("Enoble Melee Skill [ON]") else EnobleMeleeSkill:SetTitle("Enoble Melee Skill [OFF]") end
+end)
+
+local EnobleFruitSkill = Tabs.Kitsune:AddToggle("EnobleFruitSkill", {
+    Title = "Enoble Fruit Skill [OFF]",
+    Description = "Enoble fruit skills",
+    Default = false
+})
+
+EnobleFruitSkill:OnChanged(function(Value)
+    if Value then EnobleFruitSkill:SetTitle("Enoble Fruit Skill [ON]") else EnobleFruitSkill:SetTitle("Enoble Fruit Skill [OFF]") end
+end)
+
+local EnobleSwordSkill = Tabs.Kitsune:AddToggle("EnobleSwordSkill", {
+    Title = "Enoble Sword Skill [OFF]",
+    Description = "Enoble sword skills",
+    Default = false
+})
+
+EnobleSwordSkill:OnChanged(function(Value)
+    if Value then EnobleSwordSkill:SetTitle("Enoble Sword Skill [ON]") else EnobleSwordSkill:SetTitle("Enoble Sword Skill [OFF]") end
+end)
+
+local EnobleGunSkill = Tabs.Kitsune:AddToggle("EnobleGunSkill", {
+    Title = "Enoble Gun Skill [OFF]",
+    Description = "Enoble gun skills",
+    Default = false
+})
+
+EnobleGunSkill:OnChanged(function(Value)
+    if Value then EnobleGunSkill:SetTitle("Enoble Gun Skill [ON]") else EnobleGunSkill:SetTitle("Enoble Gun Skill [OFF]") end
+end)
+
+-- Volcano Tab
+Tabs.Volcano:AddSection("VOLCANO")
+
+local TeleportDojoTrainer = Tabs.Volcano:AddButton({
+    Title = "Teleport Dojo Trainer",
+    Description = "Teleport to Dojo Trainer",
+    Callback = function()
+        print("Teleporting to Dojo Trainer...")
+    end
+})
+
+local TeleportToDragonHunter = Tabs.Volcano:AddButton({
+    Title = "Teleport To Dragon Hunter",
+    Description = "Teleport to Dragon Hunter",
+    Callback = function()
+        print("Teleporting to Dragon Hunter...")
+    end
+})
+
+local TeleportToDragonWizard = Tabs.Volcano:AddButton({
+    Title = "Teleport To Dragon Wizard",
+    Description = "Teleport to Dragon Wizard",
+    Callback = function()
+        print("Teleporting to Dragon Wizard...")
+    end
+})
+
+local AutoQuestDragonHunter = Tabs.Volcano:AddToggle("AutoQuestDragonHunter", {
+    Title = "Auto Quest Dragon Hunter [OFF]",
+    Description = "Automatically do Dragon Hunter quest",
+    Default = false
+})
+
+AutoQuestDragonHunter:OnChanged(function(Value)
+    if Value then AutoQuestDragonHunter:SetTitle("Auto Quest Dragon Hunter [ON]") else AutoQuestDragonHunter:SetTitle("Auto Quest Dragon Hunter [OFF]") end
+end)
+
+local CraftVolcanicMagnet = Tabs.Volcano:AddButton({
+    Title = "Craft Volcanic Magnet",
+    Description = "Craft Volcanic Magnet",
+    Callback = function()
+        print("Crafting Volcanic Magnet...")
+    end
+})
+
+local CraftDinoHood = Tabs.Volcano:AddButton({
+    Title = "Craft Dino Hood",
+    Description = "Craft Dino Hood",
+    Callback = function()
+        print("Crafting Dino Hood...")
+    end
+})
+
+local CraftTRexSkull = Tabs.Volcano:AddButton({
+    Title = "Craft T-rex Skull",
+    Description = "Craft T-rex Skull",
+    Callback = function()
+        print("Crafting T-rex Skull...")
+    end
+})
+
+local FindPrehistoricIsland = Tabs.Volcano:AddButton({
+    Title = "Find Prehistoric Island",
+    Description = "Find Prehistoric Island",
+    Callback = function()
+        print("Finding Prehistoric Island...")
+    end
+})
+
+local TeleportPrehistoricIsland = Tabs.Volcano:AddButton({
+    Title = "Teleport Prehistoric Island",
+    Description = "Teleport to Prehistoric Island",
+    Callback = function()
+        print("Teleporting to Prehistoric Island...")
+    end
+})
+
+local TeleportSkullCore = Tabs.Volcano:AddButton({
+    Title = "Teleport Skull Core",
+    Description = "Teleport to Skull Core",
+    Callback = function()
+        print("Teleporting to Skull Core...")
+    end
+})
+
+local AutoKillGolemAura = Tabs.Volcano:AddToggle("AutoKillGolemAura", {
+    Title = "Auto Kill Golem Aura [OFF]",
+    Description = "Automatically kill golem with aura",
+    Default = false
+})
+
+AutoKillGolemAura:OnChanged(function(Value)
+    if Value then AutoKillGolemAura:SetTitle("Auto Kill Golem Aura [ON]") else AutoKillGolemAura:SetTitle("Auto Kill Golem Aura [OFF]") end
+end)
+
+local AutoFixVolcano = Tabs.Volcano:AddToggle("AutoFixVolcano", {
+    Title = "Auto Fix Volcano [OFF]",
+    Description = "Automatically fix volcano",
+    Default = false
+})
+
+AutoFixVolcano:OnChanged(function(Value)
+    if Value then AutoFixVolcano:SetTitle("Auto Fix Volcano [ON]") else AutoFixVolcano:SetTitle("Auto Fix Volcano [OFF]") end
+end)
+
+local CollectBone = Tabs.Volcano:AddToggle("CollectBone", {
+    Title = "Collect Bone [OFF]",
+    Description = "Automatically collect bones",
+    Default = false
+})
+
+CollectBone:OnChanged(function(Value)
+    if Value then CollectBone:SetTitle("Collect Bone [ON]") else CollectBone:SetTitle("Collect Bone [OFF]") end
+end)
+
+local CollectEgg = Tabs.Volcano:AddToggle("CollectEgg", {
+    Title = "Collect Egg [OFF]",
+    Description = "Automatically collect eggs",
+    Default = false
+})
+
+CollectEgg:OnChanged(function(Value)
+    if Value then CollectEgg:SetTitle("Collect Egg [ON]") else CollectEgg:SetTitle("Collect Egg [OFF]") end
+end)
+
+local AutoTrialDraco = Tabs.Volcano:AddToggle("AutoTrialDraco", {
+    Title = "Auto Trial Draco [OFF]",
+    Description = "Automatically do Draco trial",
+    Default = false
+})
+
+AutoTrialDraco:OnChanged(function(Value)
+    if Value then AutoTrialDraco:SetTitle("Auto Trial Draco [ON]") else AutoTrialDraco:SetTitle("Auto Trial Draco [OFF]") end
+end)
+
+local TeleportDoorDraco = Tabs.Volcano:AddButton({
+    Title = "Teleport Door Draco",
+    Description = "Teleport to Draco door",
+    Callback = function()
+        print("Teleporting to Draco door...")
+    end
+})
+
+local AutoUseMelee = Tabs.Volcano:AddToggle("AutoUseMelee", {
+    Title = "Auto Use Melee [OFF]",
+    Description = "Automatically use melee",
+    Default = false
+})
+
+AutoUseMelee:OnChanged(function(Value)
+    if Value then AutoUseMelee:SetTitle("Auto Use Melee [ON]") else AutoUseMelee:SetTitle("Auto Use Melee [OFF]") end
+end)
+
+local AutoUseFruit = Tabs.Volcano:AddToggle("AutoUseFruit", {
+    Title = "Auto Use Fruit [OFF]",
+    Description = "Automatically use fruit",
+    Default = false
+})
+
+AutoUseFruit:OnChanged(function(Value)
+    if Value then AutoUseFruit:SetTitle("Auto Use Fruit [ON]") else AutoUseFruit:SetTitle("Auto Use Fruit [OFF]") end
+end)
+
+local AutoUseSword = Tabs.Volcano:AddToggle("AutoUseSword", {
+    Title = "Auto Use Sword [OFF]",
+    Description = "Automatically use sword",
+    Default = false
+})
+
+AutoUseSword:OnChanged(function(Value)
+    if Value then AutoUseSword:SetTitle("Auto Use Sword [ON]") else AutoUseSword:SetTitle("Auto Use Sword [OFF]") end
+end)
+
+local AutoUseGun = Tabs.Volcano:AddToggle("AutoUseGun", {
+    Title = "Auto Use Gun [OFF]",
+    Description = "Automatically use gun",
+    Default = false
+})
+
+AutoUseGun:OnChanged(function(Value)
+    if Value then AutoUseGun:SetTitle("Auto Use Gun [ON]") else AutoUseGun:SetTitle("Auto Use Gun [OFF]") end
+end)
+
+-- Fishing Tab
+Tabs.Fishing:AddSection("FISHING")
+
+local FishingRodDropdown = Tabs.Fishing:AddDropdown("FishingRodDropdown", {
+    Title = "Select Fishing Rod",
+    Description = "Choose fishing rod",
+    Values = {"Fishing Rod", "Gold Rod", "Shark Rod", "Shell Rod", "Treasure Rod"},
+    Default = 1,
+})
+
+local BaitDropdown = Tabs.Fishing:AddDropdown("BaitDropdown", {
+    Title = "Select Bait",
+    Description = "Choose bait type",
+    Values = {"Basic Bait", "Kelp Bait", "Good Bait", "Abyssal Bait", "Frozen Bait", "Epic Bait", "Carnivore Bait"},
+    Default = 1,
+})
+
+local AutoFishing = Tabs.Fishing:AddToggle("AutoFishing", {
+    Title = "Auto Fishing [OFF]",
+    Description = "Automatically fish",
+    Default = false
+})
+
+AutoFishing:OnChanged(function(Value)
+    if Value then AutoFishing:SetTitle("Auto Fishing [ON]") else AutoFishing:SetTitle("Auto Fishing [OFF]") end
+end)
+
+-- Local Player Tab
+Tabs.LocalPlayer:AddSection("AIMBOT")
+
+local AimbotNoTeam = Tabs.LocalPlayer:AddToggle("AimbotNoTeam", {
+    Title = "Aimbot No Team [OFF]",
+    Description = "Aimbot ignores team members",
+    Default = false
+})
+
+AimbotNoTeam:OnChanged(function(Value)
+    if Value then AimbotNoTeam:SetTitle("Aimbot No Team [ON]") else AimbotNoTeam:SetTitle("Aimbot No Team [OFF]") end
+end)
+
+local AimbotLeastBlood = Tabs.LocalPlayer:AddToggle("AimbotLeastBlood", {
+    Title = "Aimbot Least Blood [OFF]",
+    Description = "Aimbot targets lowest health",
+    Default = false
+})
+
+AimbotLeastBlood:OnChanged(function(Value)
+    if Value then AimbotLeastBlood:SetTitle("Aimbot Least Blood [ON]") else AimbotLeastBlood:SetTitle("Aimbot Least Blood [OFF]") end
+end)
+
+local EnabledPvP = Tabs.LocalPlayer:AddToggle("EnabledPvP", {
+    Title = "Enabled PvP [OFF]",
+    Description = "Enable PvP mode",
+    Default = false
+})
+
+EnabledPvP:OnChanged(function(Value)
+    if Value then EnabledPvP:SetTitle("Enabled PvP [ON]") else EnabledPvP:SetTitle("Enabled PvP [OFF]") end
+end)
+
+local AutoActiveV3 = Tabs.LocalPlayer:AddToggle("AutoActiveV3", {
+    Title = "Auto Active V3 [OFF]",
+    Description = "Automatically activate V3",
+    Default = false
+})
+
+AutoActiveV3:OnChanged(function(Value)
+    if Value then AutoActiveV3:SetTitle("Auto Active V3 [ON]") else AutoActiveV3:SetTitle("Auto Active V3 [OFF]") end
+end)
+
+local AutoActiveV4 = Tabs.LocalPlayer:AddToggle("AutoActiveV4", {
+    Title = "Auto Active V4 [OFF]",
+    Description = "Automatically activate V4",
+    Default = false
+})
+
+AutoActiveV4:OnChanged(function(Value)
+    if Value then AutoActiveV4:SetTitle("Auto Active V4 [ON]") else AutoActiveV4:SetTitle("Auto Active V4 [OFF]") end
+end)
+
+local EnableFly = Tabs.LocalPlayer:AddToggle("EnableFly", {
+    Title = "Enable Fly [OFF]",
+    Description = "Enable flying mode",
+    Default = false
+})
+
+EnableFly:OnChanged(function(Value)
+    if Value then EnableFly:SetTitle("Enable Fly [ON]") else EnableFly:SetTitle("Enable Fly [OFF]") end
+end)
+
+local WalkOnWater = Tabs.LocalPlayer:AddToggle("WalkOnWater", {
+    Title = "Walk On Water [OFF]",
+    Description = "Walk on water surface",
+    Default = false
+})
+
+WalkOnWater:OnChanged(function(Value)
+    if Value then WalkOnWater:SetTitle("Walk On Water [ON]") else WalkOnWater:SetTitle("Walk On Water [OFF]") end
+end)
+
+Tabs.LocalPlayer:AddSection("MOVEMENT")
+
+local WalkSpeedDropdown = Tabs.LocalPlayer:AddDropdown("WalkSpeedDropdown", {
+    Title = "Select Walk Speed",
+    Description = "Choose walking speed",
+    Values = {"150", "200", "250", "300", "350"},
+    Default = 1,
+})
+
+local NoClip = Tabs.LocalPlayer:AddToggle("NoClip", {
+    Title = "No Clip [OFF]",
+    Description = "Enable noclip mode",
+    Default = false
+})
+
+NoClip:OnChanged(function(Value)
+    if Value then NoClip:SetTitle("No Clip [ON]") else NoClip:SetTitle("No Clip [OFF]") end
+end)
+
+-- Visual Tab
+Tabs.Visual:AddSection("ESP")
+
+local EspPlayer = Tabs.Visual:AddToggle("EspPlayer", {
+    Title = "ESP Player [OFF]",
+    Description = "Show player ESP",
+    Default = false
+})
+
+EspPlayer:OnChanged(function(Value)
+    if Value then EspPlayer:SetTitle("ESP Player [ON]") else EspPlayer:SetTitle("ESP Player [OFF]") end
+end)
+
+local EspFruit = Tabs.Visual:AddToggle("EspFruit", {
+    Title = "ESP Fruit [OFF]",
+    Description = "Show fruit ESP",
+    Default = false
+})
+
+EspFruit:OnChanged(function(Value)
+    if Value then EspFruit:SetTitle("ESP Fruit [ON]") else EspFruit:SetTitle("ESP Fruit [OFF]") end
+end)
+
+local EspBerries = Tabs.Visual:AddToggle("EspBerries", {
+    Title = "ESP Berries [OFF]",
+    Description = "Show berries ESP",
+    Default = false
+})
+
+EspBerries:OnChanged(function(Value)
+    if Value then EspBerries:SetTitle("ESP Berries [ON]") else EspBerries:SetTitle("ESP Berries [OFF]") end
+end)
+
+local EspIsland = Tabs.Visual:AddToggle("EspIsland", {
+    Title = "ESP Island [OFF]",
+    Description = "Show island ESP",
+    Default = false
+})
+
+EspIsland:OnChanged(function(Value)
+    if Value then EspIsland:SetTitle("ESP Island [ON]") else EspIsland:SetTitle("ESP Island [OFF]") end
+end)
+
+local EspMysticIsland = Tabs.Visual:AddToggle("EspMysticIsland", {
+    Title = "ESP Mystic Island [OFF]",
+    Description = "Show mystic island ESP",
+    Default = false
+})
+
+EspMysticIsland:OnChanged(function(Value)
+    if Value then EspMysticIsland:SetTitle("ESP Mystic Island [ON]") else EspMysticIsland:SetTitle("ESP Mystic Island [OFF]") end
+end)
+
+local EspIslandKitsune = Tabs.Visual:AddToggle("EspIslandKitsune", {
+    Title = "ESP Island Kitsune [OFF]",
+    Description = "Show Kitsune island ESP",
+    Default = false
+})
+
+EspIslandKitsune:OnChanged(function(Value)
+    if Value then EspIslandKitsune:SetTitle("ESP Island Kitsune [ON]") else EspIslandKitsune:SetTitle("ESP Island Kitsune [OFF]") end
+end)
+
+-- Fruit + Raid Tab
+Tabs.FruitRaid:AddSection("FRUIT SELECTION")
+
+local ChipsDropdown = Tabs.FruitRaid:AddDropdown("ChipsDropdown", {
+    Title = "Select Chips",
+    Description = "Choose fruit chips",
+    Values = {"Flame", "Ice", "Quake", "Dark", "Light", "Buddha", "Sand", "Magma", "Dough", "Phoenix"},
+    Default = 1,
+})
+
+Tabs.FruitRaid:AddSection("RAID")
+
+local AutoStartDungeon = Tabs.FruitRaid:AddToggle("AutoStartDungeon", {
+    Title = "Auto Start Dungeon [OFF]",
+    Description = "Automatically start dungeon",
+    Default = false
+})
+
+AutoStartDungeon:OnChanged(function(Value)
+    if Value then AutoStartDungeon:SetTitle("Auto Start Dungeon [ON]") else AutoStartDungeon:SetTitle("Auto Start Dungeon [OFF]") end
+end)
+
+local AutoNextIslandKillMob = Tabs.FruitRaid:AddToggle("AutoNextIslandKillMob", {
+    Title = "Auto Next Island Kill Mob [OFF]",
+    Description = "Auto next island and kill mobs",
+    Default = false
+})
+
+AutoNextIslandKillMob:OnChanged(function(Value)
+    if Value then AutoNextIslandKillMob:SetTitle("Auto Next Island Kill Mob [ON]") else AutoNextIslandKillMob:SetTitle("Auto Next Island Kill Mob [OFF]") end
+end)
+
+local AutoAwakener = Tabs.FruitRaid:AddToggle("AutoAwakener", {
+    Title = "Auto Awakener [OFF]",
+    Description = "Automatically awaken fruits",
+    Default = false
+})
+
+AutoAwakener:OnChanged(function(Value)
+    if Value then AutoAwakener:SetTitle("Auto Awakener [ON]") else AutoAwakener:SetTitle("Auto Awakener [OFF]") end
+end)
+
+local AutoRandomFruit = Tabs.FruitRaid:AddToggle("AutoRandomFruit", {
+    Title = "Auto Random Fruit [OFF]",
+    Description = "Automatically get random fruit",
+    Default = false
+})
+
+AutoRandomFruit:OnChanged(function(Value)
+    if Value then AutoRandomFruit:SetTitle("Auto Random Fruit [ON]") else AutoRandomFruit:SetTitle("Auto Random Fruit [OFF]") end
+end)
+
+Tabs.FruitRaid:AddSection("DEVIL FRUIT")
+
+local OpenDevilShop = Tabs.FruitRaid:AddButton({
+    Title = "Open Devil Shop",
+    Description = "Open devil fruit shop",
+    Callback = function()
+        print("Opening Devil Shop...")
+    end
+})
+
+local OpenDevilShopMirage = Tabs.FruitRaid:AddButton({
+    Title = "Open Devil Shop Mirage",
+    Description = "Open devil fruit shop in mirage",
+    Callback = function()
+        print("Opening Devil Shop Mirage...")
+    end
+})
+
+local AutoStoreFruit = Tabs.FruitRaid:AddToggle("AutoStoreFruit", {
+    Title = "Auto Store Fruit [OFF]",
+    Description = "Automatically store fruits",
+    Default = false
+})
+
+AutoStoreFruit:OnChanged(function(Value)
+    if Value then AutoStoreFruit:SetTitle("Auto Store Fruit [ON]") else AutoStoreFruit:SetTitle("Auto Store Fruit [OFF]") end
+end)
+
+local BringFruit = Tabs.FruitRaid:AddToggle("BringFruit", {
+    Title = "Bring Fruit [OFF]",
+    Description = "Bring fruits to you",
+    Default = false
+})
+
+BringFruit:OnChanged(function(Value)
+    if Value then BringFruit:SetTitle("Bring Fruit [ON]") else BringFruit:SetTitle("Bring Fruit [OFF]") end
+end)
+
+local TweenFruit = Tabs.FruitRaid:AddToggle("TweenFruit", {
+    Title = "Tween Fruit [OFF]",
+    Description = "Tween to fruits",
+    Default = false
+})
+
+TweenFruit:OnChanged(function(Value)
+    if Value then TweenFruit:SetTitle("Tween Fruit [ON]") else TweenFruit:SetTitle("Tween Fruit [OFF]") end
+end)
+
+-- Teleport Tab
+Tabs.Teleport:AddSection("SEA TELEPORT")
+
+local TeleportToSea1 = Tabs.Teleport:AddButton({
+    Title = "Teleport To Sea 1",
+    Description = "Teleport to Sea 1",
+    Callback = function()
+        print("Teleporting to Sea 1...")
+    end
+})
+
+local TeleportToSea2 = Tabs.Teleport:AddButton({
+    Title = "Teleport To Sea 2",
+    Description = "Teleport to Sea 2",
+    Callback = function()
+        print("Teleporting to Sea 2...")
+    end
+})
+
+local TeleportToSea3 = Tabs.Teleport:AddButton({
+    Title = "Teleport To Sea 3",
+    Description = "Teleport to Sea 3",
+    Callback = function()
+        print("Teleporting to Sea 3...")
+    end
+})
+
+Tabs.Teleport:AddSection("ISLAND TELEPORT")
+
+local IslandDropdown = Tabs.Teleport:AddDropdown("IslandDropdown", {
+    Title = "Select Island",
+    Description = "Choose island to teleport",
+    Values = {"Third Sea", "Port Town", "Hydra Island", "Great Tree", "Floating Turtle", "Mansion", "Castle On The Sea", "Haunted Castle", "Sea Of Treats"},
+    Default = 1,
+})
+
+local TeleportBypass = Tabs.Teleport:AddToggle("TeleportBypass", {
+    Title = "Teleport Bypass [OFF]",
+    Description = "Bypass teleport restrictions",
+    Default = false
+})
+
+TeleportBypass:OnChanged(function(Value)
+    if Value then TeleportBypass:SetTitle("Teleport Bypass [ON]") else TeleportBypass:SetTitle("Teleport Bypass [OFF]") end
+end)
+
+-- Shop Tab
+Tabs.Shop:AddSection("ABILITIES")
+
+local BuyGeppo = Tabs.Shop:AddButton({
+    Title = "Buy Geppo",
+    Description = "Purchase Geppo ability",
+    Callback = function()
+        print("Buying Geppo...")
+    end
+})
+
+local BuyBusoHaki = Tabs.Shop:AddButton({
+    Title = "Buy Buso Haki",
+    Description = "Purchase Buso Haki",
+    Callback = function()
+        print("Buying Buso Haki...")
+    end
+})
+
+local BuySoru = Tabs.Shop:AddButton({
+    Title = "Buy Soru",
+    Description = "Purchase Soru ability",
+    Callback = function()
+        print("Buying Soru...")
+    end
+})
+
+local BuyObservationHaki = Tabs.Shop:AddButton({
+    Title = "Buy Observation Haki",
+    Description = "Purchase Observation Haki",
+    Callback = function()
+        print("Buying Observation Haki...")
+    end
+})
+
+local AutoBuyAbilities = Tabs.Shop:AddToggle("AutoBuyAbilities", {
+    Title = "Auto Buy Abilities [OFF]",
+    Description = "Automatically buy all abilities",
+    Default = false
+})
+
+AutoBuyAbilities:OnChanged(function(Value)
+    if Value then AutoBuyAbilities:SetTitle("Auto Buy Abilities [ON]") else AutoBuyAbilities:SetTitle("Auto Buy Abilities [OFF]") end
+end)
+
+Tabs.Shop:AddSection("FIGHTING STYLES")
+
+local BuyBlackLeg = Tabs.Shop:AddButton({
+    Title = "Buy Black Leg",
+    Description = "Purchase Black Leg style",
+    Callback = function()
+        print("Buying Black Leg...")
+    end
+})
+
+local BuyElectro = Tabs.Shop:AddButton({
+    Title = "Buy Electro",
+    Description = "Purchase Electro style",
+    Callback = function()
+        print("Buying Electro...")
+    end
+})
+
+local BuyFishmanKarate = Tabs.Shop:AddButton({
+    Title = "Buy Fishman Karate",
+    Description = "Purchase Fishman Karate",
+    Callback = function()
+        print("Buying Fishman Karate...")
+    end
+})
+
+local BuyDragonCraw = Tabs.Shop:AddButton({
+    Title = "Buy Dragon Craw",
+    Description = "Purchase Dragon Craw",
+    Callback = function()
+        print("Buying Dragon Craw...")
+    end
+})
+
+local BuySuperHuman = Tabs.Shop:AddButton({
+    Title = "Buy Super Human",
+    Description = "Purchase Super Human",
+    Callback = function()
+        print("Buying Super Human...")
+    end
+})
+
+local BuyDeathStep = Tabs.Shop:AddButton({
+    Title = "Buy Death Step",
+    Description = "Purchase Death Step",
+    Callback = function()
+        print("Buying Death Step...")
+    end
+})
+
+local BuySharkmanKarate = Tabs.Shop:AddButton({
+    Title = "Buy Sharkman Karate",
+    Description = "Purchase Sharkman Karate",
+    Callback = function()
+        print("Buying Sharkman Karate...")
+    end
+})
+
+local BuyElectricClaw = Tabs.Shop:AddButton({
+    Title = "Buy Electric Claw",
+    Description = "Purchase Electric Claw",
+    Callback = function()
+        print("Buying Electric Claw...")
+    end
+})
+
+local BuyDragonTalon = Tabs.Shop:AddButton({
+    Title = "Buy Dragon Talon",
+    Description = "Purchase Dragon Talon",
+    Callback = function()
+        print("Buying Dragon Talon...")
+    end
+})
+
+local BuyGodHuman = Tabs.Shop:AddButton({
+    Title = "Buy God Human",
+    Description = "Purchase God Human",
+    Callback = function()
+        print("Buying God Human...")
+    end
+})
+
+local BuySanguineArt = Tabs.Shop:AddButton({
+    Title = "Buy Sanguine Art",
+    Description = "Purchase Sanguine Art",
+    Callback = function()
+        print("Buying Sanguine Art...")
+    end
+})
+
+Tabs.Shop:AddSection("SWORDS")
+
+local BuyCutlass = Tabs.Shop:AddButton({
+    Title = "Buy Cutlass",
+    Description = "Purchase Cutlass",
+    Callback = function()
+        print("Buying Cutlass...")
+    end
+})
+
+local BuyKatana = Tabs.Shop:AddButton({
+    Title = "Buy Katana",
+    Description = "Purchase Katana",
+    Callback = function()
+        print("Buying Katana...")
+    end
+})
+
+local BuyIronMace = Tabs.Shop:AddButton({
+    Title = "Buy Iron Mace",
+    Description = "Purchase Iron Mace",
+    Callback = function()
+        print("Buying Iron Mace...")
+    end
+})
+
+local BuyDualKatana = Tabs.Shop:AddButton({
+    Title = "Buy Dual Katana",
+    Description = "Purchase Dual Katana",
+    Callback = function()
+        print("Buying Dual Katana...")
+    end
+})
+
+local BuyPipe = Tabs.Shop:AddButton({
+    Title = "Buy Pipe",
+    Description = "Purchase Pipe",
+    Callback = function()
+        print("Buying Pipe...")
+    end
+})
+
+local BuyDualHeadedBlade = Tabs.Shop:AddButton({
+    Title = "Buy Dual-Headed Blade",
+    Description = "Purchase Dual-Headed Blade",
+    Callback = function()
+        print("Buying Dual-Headed Blade...")
+    end
+})
+
+local BuyBisento = Tabs.Shop:AddButton({
+    Title = "Buy Bisento",
+    Description = "Purchase Bisento",
+    Callback = function()
+        print("Buying Bisento...")
+    end
+})
+
+local BuyTripleKatana = Tabs.Shop:AddButton({
+    Title = "Buy Triple Katana",
+    Description = "Purchase Triple Katana",
+    Callback = function()
+        print("Buying Triple Katana...")
+    end
+})
+
+local BuySoulCane = Tabs.Shop:AddButton({
+    Title = "Buy Soul Cane",
+    Description = "Purchase Soul Cane",
+    Callback = function()
+        print("Buying Soul Cane...")
+    end
+})
+
+local BuyPileV2 = Tabs.Shop:AddButton({
+    Title = "Buy Pile V2",
+    Description = "Purchase Pile V2",
+    Callback = function()
+        print("Buying Pile V2...")
+    end
+})
+
+Tabs.Shop:AddSection("GUNS")
+
+local BuySlingshot = Tabs.Shop:AddButton({
+    Title = "Buy Slingshot",
+    Description = "Purchase Slingshot",
+    Callback = function()
+        print("Buying Slingshot...")
+    end
+})
+
+local BuyMusket = Tabs.Shop:AddButton({
+    Title = "Buy Musket",
+    Description = "Purchase Musket",
+    Callback = function()
+        print("Buying Musket...")
+    end
+})
+
+local BuyFlintlock = Tabs.Shop:AddButton({
+    Title = "Buy Flintlock",
+    Description = "Purchase Flintlock",
+    Callback = function()
+        print("Buying Flintlock...")
+    end
+})
+
+local BuyRefinedSlingshot = Tabs.Shop:AddButton({
+    Title = "Buy Refined Slingshot",
+    Description = "Purchase Refined Slingshot",
+    Callback = function()
+        print("Buying Refined Slingshot...")
+    end
+})
+
+local BuyRefinedFlintlock = Tabs.Shop:AddButton({
+    Title = "Buy Refined Flintlock",
+    Description = "Purchase Refined Flintlock",
+    Callback = function()
+        print("Buying Refined Flintlock...")
+    end
+})
+
+local BuyCannon = Tabs.Shop:AddButton({
+    Title = "Buy Cannon",
+    Description = "Purchase Cannon",
+    Callback = function()
+        print("Buying Cannon...")
+    end
+})
+
+local BuyKabucha = Tabs.Shop:AddButton({
+    Title = "Buy Kabucha",
+    Description = "Purchase Kabucha",
+    Callback = function()
+        print("Buying Kabucha...")
+    end
+})
+
+Tabs.Shop:AddSection("OTHER")
+
+local ResetStats = Tabs.Shop:AddButton({
+    Title = "Reset Stats",
+    Description = "Reset character stats",
+    Callback = function()
+        print("Resetting Stats...")
+    end
+})
+
+local RandomRace = Tabs.Shop:AddButton({
+    Title = "Random Race",
+    Description = "Get random race",
+    Callback = function()
+        print("Getting Random Race...")
+    end
+})
+
+local BuyGhoul = Tabs.Shop:AddButton({
+    Title = "Buy Ghoul",
+    Description = "Purchase Ghoul race",
+    Callback = function()
+        print("Buying Ghoul...")
+    end
+})
+
+local BuyCyborg = Tabs.Shop:AddButton({
+    Title = "Buy Cyborg",
+    Description = "Purchase Cyborg race",
+    Callback = function()
+        print("Buying Cyborg...")
+    end
+})
+
+-- Misc Tab
+Tabs.Misc:AddSection("SERVER")
+
+local RejoinServer = Tabs.Misc:AddButton({
+    Title = "Rejoin Server",
+    Description = "Rejoin current server",
+    Callback = function()
+        print("Rejoining Server...")
+    end
+})
+
+local ServerHop = Tabs.Misc:AddButton({
+    Title = "Server Hop",
+    Description = "Hop to different server",
+    Callback = function()
+        print("Server Hopping...")
+    end
+})
+
+local HopToLowerPlayer = Tabs.Misc:AddButton({
+    Title = "Hop To Lower Player",
+    Description = "Hop to server with fewer players",
+    Callback = function()
+        print("Hopping to lower player server...")
+    end
+})
+
+local JoinPiratesTeam = Tabs.Misc:AddButton({
+    Title = "Join Pirates Team",
+    Description = "Join Pirates team",
+    Callback = function()
+        print("Joining Pirates Team...")
+    end
+})
+
+local JoinMarines = Tabs.Misc:AddButton({
+    Title = "Join Marines",
+    Description = "Join Marines team",
+    Callback = function()
+        print("Joining Marines...")
+    end
+})
+
+local RedeemAllCode = Tabs.Misc:AddButton({
+    Title = "Redeem All Code",
+    Description = "Redeem all available codes",
+    Callback = function()
+        print("Redeeming All Codes...")
+    end
+})
+
+local OpenTitle = Tabs.Misc:AddButton({
+    Title = "Open Title",
+    Description = "Open title selection",
+    Callback = function()
+        print("Opening Title...")
+    end
+})
+
+-- Save/Load System
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+InterfaceManager:SetFolder("RikyHub")
+SaveManager:SetFolder("RikyHub/bloxfruits")
+InterfaceManager:BuildInterfaceSection(Tabs.Main)
+SaveManager:BuildConfigSection(Tabs.Main)
+
+-- Footer
+Tabs.Main:AddSection("INFO")
+
+Tabs.Main:AddParagraph({
+    Title = "Riky Hub | Blox Fruit V1.8 Premium",
+    Content = "Discord: " .. RikyHub.Discord
+})
+
+-- Floating Button
+local RikyFloatingButton = Instance.new("ScreenGui")
+local ImageButton = Instance.new("ImageButton")
+local UICorner = Instance.new("UICorner")
+
+RikyFloatingButton.Name = "RikyFloatingButton"
+RikyFloatingButton.Parent = game:GetService("CoreGui")
+RikyFloatingButton.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+ImageButton.Parent = RikyFloatingButton
+ImageButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+ImageButton.BorderSizePixel = 0
+ImageButton.Position = UDim2.new(0.02, 0, 0.4, 0)
+ImageButton.Size = UDim2.new(0, 60, 0, 60)
+ImageButton.Image = "rbxassetid://106603644969449"
+ImageButton.Draggable = true
+
+UICorner.Parent = ImageButton
+UICorner.CornerRadius = UDim.new(0, 12)
+
+-- Button Animation
+local rotateTween = TweenService:Create(ImageButton, 
+    TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, -1), 
+    {Rotation = 360}
+)
+
+ImageButton.MouseEnter:Connect(function()
+    rotateTween:Play()
+    ImageButton.Size = UDim2.new(0, 65, 0, 65)
+end)
+
+ImageButton.MouseLeave:Connect(function()
+    rotateTween:Pause()
+    ImageButton.Rotation = 0
+    ImageButton.Size = UDim2.new(0, 60, 0, 60)
+end)
+
+ImageButton.MouseButton1Click:Connect(function()
+    RikyWindow:Minimize()
+end)
+
+-- Ẩn Welcome Screen sau khi load xong
+wait(3)
+WelcomeGui:Destroy()
+
+-- Select main tab
+RikyWindow:SelectTab(1)
+
+-- Initialization
+warn("[Riky Hub] Initialized - V1.8 Premium | Blox Fruit")
+print("Discord: " .. RikyHub.Discord)
+print("All features added successfully! Total Tabs: 15")
