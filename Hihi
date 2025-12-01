@@ -1,0 +1,557 @@
+-- RizmaVN Hub | Hunty Zombie v4.0
+-- Premium Script by Riky VNG🎄❄️
+
+local Players = game:GetService("Players")
+local plr = Players.LocalPlayer
+local TweenService = game:GetService("TweenService")
+local VirtualUser = game:GetService("VirtualUser")
+local HttpService = game:GetService("HttpService")
+
+-- RizmaVN Hub Configuration
+local RizmaVNHub = {
+    Version = "v4.0 Premium",
+    Developer = "Riky VNG🎄❄️",
+    ImageID = "rbxassetid://106603644969449",
+    Discord = "discord.gg/rizmavn",
+    Premium = true,
+    Key = "RizmaVN2026"
+}
+
+-- Key System
+local function CheckKey()
+    if getgenv().RizmaVNKey then
+        return getgenv().RizmaVNKey == RizmaVNHub.Key
+    end
+    
+    local ui = Instance.new("ScreenGui")
+    local frame = Instance.new("Frame")
+    local textbox = Instance.new("TextBox")
+    local button = Instance.new("TextButton")
+    
+    ui.Parent = game:GetService("CoreGui")
+    ui.Name = "RizmaVNKeySystem"
+    
+    frame.Parent = ui
+    frame.Size = UDim2.new(0, 350, 0, 200)
+    frame.Position = UDim2.new(0.5, -175, 0.5, -100)
+    frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    frame.BorderSizePixel = 0
+    
+    local corner = Instance.new("UICorner")
+    corner.Parent = frame
+    corner.CornerRadius = UDim.new(0, 12)
+    
+    local title = Instance.new("TextLabel")
+    title.Parent = frame
+    title.Size = UDim2.new(1, 0, 0, 50)
+    title.Position = UDim2.new(0, 0, 0, 0)
+    title.BackgroundTransparency = 1
+    title.Text = "RIZMAVN HUB KEY SYSTEM"
+    title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    title.TextSize = 20
+    title.Font = Enum.Font.GothamBold
+    
+    local subtitle = Instance.new("TextLabel")
+    subtitle.Parent = frame
+    subtitle.Size = UDim2.new(1, 0, 0, 30)
+    subtitle.Position = UDim2.new(0, 0, 0, 40)
+    subtitle.BackgroundTransparency = 1
+    subtitle.Text = "Nhập key để kích hoạt RizmaVN Hub"
+    subtitle.TextColor3 = Color3.fromRGB(200, 200, 200)
+    subtitle.TextSize = 14
+    subtitle.Font = Enum.Font.Gotham
+    
+    textbox.Parent = frame
+    textbox.Size = UDim2.new(0.8, 0, 0, 40)
+    textbox.Position = UDim2.new(0.1, 0, 0.35, 0)
+    textbox.PlaceholderText = "Nhập key tại đây..."
+    textbox.Text = ""
+    textbox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    textbox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    textbox.TextSize = 16
+    textbox.ClearTextOnFocus = false
+    
+    local textboxCorner = Instance.new("UICorner")
+    textboxCorner.Parent = textbox
+    textboxCorner.CornerRadius = UDim.new(0, 6)
+    
+    button.Parent = frame
+    button.Size = UDim2.new(0.6, 0, 0, 40)
+    button.Position = UDim2.new(0.2, 0, 0.7, 0)
+    button.Text = "XÁC NHẬN KEY"
+    button.BackgroundColor3 = Color3.fromRGB(0, 100, 255)
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.TextSize = 16
+    button.Font = Enum.Font.GothamBold
+    
+    local buttonCorner = Instance.new("UICorner")
+    buttonCorner.Parent = button
+    buttonCorner.CornerRadius = UDim.new(0, 6)
+    
+    local function verifyKey()
+        local enteredKey = textbox.Text
+        if enteredKey == RizmaVNHub.Key then
+            getgenv().RizmaVNKey = enteredKey
+            ui:Destroy()
+            return true
+        else
+            textbox.Text = ""
+            textbox.PlaceholderText = "Key sai! Thử lại..."
+            return false
+        end
+    end
+    
+    button.MouseButton1Click:Connect(verifyKey)
+    textbox.FocusLost:Connect(function(enterPressed)
+        if enterPressed then
+            verifyKey()
+        end
+    end)
+    
+    repeat wait() until getgenv().RizmaVNKey == RizmaVNHub.Key
+    return true
+end
+
+-- Check key before loading
+if not CheckKey() then
+    return
+end
+
+-- Load Fluent UI for RizmaVN Hub
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+-- Create RizmaVN Hub Window
+local RizmaWindow = Fluent:CreateWindow({
+    Title = "RizmaVN Hub | Hunty Zombie v4.0",
+    SubTitle = "Premium by Riky VNG🎄❄️",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(500, 500),
+    Acrylic = true,
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.RightControl
+})
+
+-- Tabs
+local Tabs = {
+    Main = RizmaWindow:AddTab({Title = "MAIN", Icon = ""}),
+    Lobby = RizmaWindow:AddTab({Title = "LOBBY", Icon = ""}),
+    Weapons = RizmaWindow:AddTab({Title = "WEAPONS", Icon = ""}),
+    Combat = RizmaWindow:AddTab({Title = "COMBAT", Icon = ""}),
+    Skills = RizmaWindow:AddTab({Title = "SKILLS", Icon = ""}),
+    Misc = RizmaWindow:AddTab({Title = "MISC", Icon = ""})
+}
+
+-- RizmaVN Hub Status
+Tabs.Main:AddSection("STATUS")
+
+local PremiumStatus = Tabs.Main:AddParagraph({
+    Title = "RIZMAVN HUB: PREMIUM ACTIVATED",
+    Content = "Version: " .. RizmaVNHub.Version .. " | Key: Verified"
+})
+
+-- Utilities
+Tabs.Main:AddSection("UTILITIES")
+
+local AntiAFKToggle = Tabs.Main:AddToggle("AntiAFKToggle", {
+    Title = "Anti-AFK",
+    Description = "Tránh bị AFK kick",
+    Default = true
+})
+
+AntiAFKToggle:OnChanged(function(Value)
+    if Value then
+        plr.Idled:Connect(function()
+            VirtualUser:CaptureController()
+            VirtualUser:ClickButton2(Vector2.new())
+        end)
+    end
+end)
+
+local AntiGameKickToggle = Tabs.Main:AddToggle("AntiGameKickToggle", {
+    Title = "Anti Game Kick",
+    Description = "Chống Game Kick",
+    Default = false
+})
+
+AntiGameKickToggle:OnChanged(function(Value)
+    if Value then
+        -- Code chống game kick
+        print("Anti Game Kick đã bật")
+    else
+        print("Anti Game Kick đã tắt")
+    end
+end)
+
+-- AUTO FARM FEATURES
+Tabs.Main:AddSection("AUTO FARM")
+
+local AutoFarmMob = Tabs.Main:AddToggle("AutoFarmMob", {
+    Title = "Aotu Farm",
+    Description = "Tự động đánh mob",
+    Default = false
+})
+
+local AutoCollectDrop = Tabs.Main:AddToggle("AutoCollectDrop", {
+    Title = "Collect Dropitem",
+    Description = "Tự động nhặt đồ rơi",
+    Default = false
+})
+
+local AutoEscapeBoss = Tabs.Main:AddToggle("AutoEscapeBoss", {
+    Title = "Escape Boss Skill",
+    Description = "Né skill của boss",
+    Default = false
+})
+
+local AutoDameAura = Tabs.Main:AddToggle("AutoDameAura", {
+    Title = "Damage Aura",
+    Description = "Kích hoạt damage aura",
+    Default = false
+})
+
+local AutoReplay = Tabs.Main:AddToggle("AutoReplay", {
+    Title = "Auto Replay",
+    Description = "Tự động chơi lại map",
+    Default = false
+})
+
+local AutoWinPayload = Tabs.Main:AddToggle("AutoWinPayload", {
+    Title = "Auto Win Payload",
+    Description = "Tự động thắng chế độ Payload",
+    Default = false
+})
+
+local TpToLobby = Tabs.Main:AddToggle("TpToLobby", {
+    Title = "Teleport To Lobby ( Have Bug! )",
+    Description = "Tự rời map khi quái lỗi",
+    Default = false
+})
+
+-- Auto Win Payload Function
+local function AutoWinPayloadFunction()
+    while AutoWinPayload do
+        wait(1)
+        -- Code để tự động thắng Payload
+        print("Auto Win Payload đang chạy...")
+    end
+end
+
+AutoWinPayload:OnChanged(function(Value)
+    if Value then
+        AutoWinPayloadFunction()
+    end
+end)
+
+-- TAB 2: LOBBY
+Tabs.Lobby:AddSection("LOBBY MODES")
+
+-- Mode Selection Toggles
+local AutoNormal = Tabs.Lobby:AddToggle("AutoNormal", {
+    Title = "Normal",
+    Description = "Chế độ Normal",
+    Default = false
+})
+
+local AutoHard = Tabs.Lobby:AddToggle("AutoHard", {
+    Title = "Hard",
+    Description = "Chế độ Hard",
+    Default = false
+})
+
+local AutoNightmare = Tabs.Lobby:AddToggle("AutoNightmare", {
+    Title = "Nightmare",
+    Description = "Chế độ Nightmare",
+    Default = false
+})
+
+local AutoHell = Tabs.Lobby:AddToggle("AutoHell", {
+    Title = "Hell",
+    Description = "Chế độ Hell",
+    Default = false
+})
+
+local AutoCampaign = Tabs.Lobby:AddToggle("AutoCampaign", {
+    Title = "Campaign",
+    Description = "Chế độ Cambodia 🇰🇭🥀",
+    Default = false
+})
+
+local AutoEndless = Tabs.Lobby:AddToggle("AutoEndless", {
+    Title = "Endless",
+    Description = "Chế độ Endless",
+    Default = false
+})
+
+local AutoRaid = Tabs.Lobby:AddToggle("AutoRaid", {
+    Title = "Raid",
+    Description = "Chế độ Raid",
+    Default = false
+})
+
+local AutoPayload = Tabs.Lobby:AddToggle("AutoPayload", {
+    Title = "Payload",
+    Description = "Chế độ Payload",
+    Default = false
+})
+
+-- Auto Join Toggle
+local AutoJoinSolo = Tabs.Lobby:AddToggle("AutoJoinSolo", {
+    Title = "Auto Join Map (Solo)",
+    Description = "Tự động Vào Map 1 Mình",
+    Default = false
+})
+
+Tabs.Lobby:AddSection("MAP SELECTION")
+
+-- Map Selection Dropdown
+local MapSelection = Tabs.Lobby:AddDropdown("MapSelection", {
+    Title = "Chọn Map/Boss",
+    Description = "Chọn map hoặc boss",
+    Values = {"School", "Sewers", "Carnival", "City", "Island", "Shotgun", "Graveyard", "ReaperTrial","Joker"},
+    Multi = false,
+    Default = "School",
+})
+
+MapSelection:OnChanged(function(Value)
+    print("Map đã chọn:", Value)
+end)
+
+-- TAB 3: WEAPONS
+Tabs.Weapons:AddSection("SPIN WEAPONS")
+
+local AutoSpinWeapons = Tabs.Weapons:AddToggle("AutoSpinWeapons", {
+    Title = "Auto Spin Weapons & Skills",
+    Description = "Tự động quay vũ khí và skill",
+    Default = false
+})
+
+Tabs.Weapons:AddSection("WEAPONS")
+
+-- Weapons Selection Dropdown
+local WeaponSelection = Tabs.Weapons:AddDropdown("WeaponSelection", {
+    Title = "Chọn Vũ Khí",
+    Description = "Chọn vũ khí để auto",
+    Values = {"Katana", "Greatsword", "Scissors", "Amchot", "Hand Fan", "Shoes", "Ghost", "Spinal Blade", "Sledge Hammer","Wizard", "Vampire", "Double Damage", "Damage Shield","Joker"},
+    Multi = false,
+    Default = "Katana",
+})
+
+WeaponSelection:OnChanged(function(Value)
+    print("Vũ khí đã chọn:", Value)
+end)
+
+-- TAB 4: COMBAT
+Tabs.Combat:AddSection("TRAITS")
+
+-- Auto Trait Toggle
+local AutoTraitToggle = Tabs.Combat:AddToggle("AutoTraitToggle", {
+    Title = "Auto Trait",
+    Description = "Tự động kích hoạt trait",
+    Default = false
+})
+
+-- Trait Selection Dropdown
+local TraitSelection = Tabs.Combat:AddDropdown("TraitSelection", {
+    Title = "Chọn Trait",
+    Description = "Chọn trait để kích hoạt",
+    Values = {"Critical Dmg", "Beast", "Prodigy"},
+    Multi = false,
+    Default = "Critical Dmg",
+})
+
+TraitSelection:OnChanged(function(Value)
+    print("Trait đã chọn:", Value)
+end)
+
+Tabs.Combat:AddSection("TRAIL WEAPON")
+
+-- Trail Weapon Slot Selection
+local TrailWeaponSlot = Tabs.Combat:AddDropdown("TrailWeaponSlot", {
+    Title = "Chọn Trail Weapon Slot",
+    Description = "Chọn slot trail weapon",
+    Values = {"Slot 1", "Slot 2", "Slot 3", "Slot 4"},
+    Multi = false,
+    Default = "Slot 1",
+})
+
+TrailWeaponSlot:OnChanged(function(Value)
+    print("Trail weapon slot đã chọn:", Value)
+end)
+
+Tabs.Combat:AddSection("WEAPON FARM")
+
+-- Weapon Farm Selection
+local WeaponFarmSelection = Tabs.Combat:AddDropdown("WeaponFarmSelection", {
+    Title = "Chọn Weapon Farm",
+    Description = "Chọn weapon để farm",
+    Values = {"Weapon 1", "Weapon 2", "Weapon 3", "Weapon 4"},
+    Multi = false,
+    Default = "Weapon 1",
+})
+
+WeaponFarmSelection:OnChanged(function(Value)
+    print("Weapon farm đã chọn:", Value)
+end)
+
+-- Attack Mode Selection
+local AttackModeSelection = Tabs.Combat:AddDropdown("AttackModeSelection", {
+    Title = "Chế Độ Tấn Công",
+    Description = "Chọn chế độ tấn công",
+    Values = {"Normal Attack", "Fast Attack", "Super Attack"},
+    Multi = false,
+    Default = "Normal Attack",
+})
+
+AttackModeSelection:OnChanged(function(Value)
+    print("Chế độ tấn công đã chọn:", Value)
+end)
+
+local AutoBypassSchool = Tabs.Combat:AddToggle("AutoBypassSchool", {
+    Title = "Bypass School",
+    Description = "Bypass map school",
+    Default = false
+})
+
+Tabs.Combat:AddSection("FLYING MODE")
+
+-- Flying Mode Selection
+local FlyingModeSelection = Tabs.Combat:AddDropdown("FlyingModeSelection", {
+    Title = "Chế Độ Bay",
+    Description = "Chọn chế độ bay",
+    Values = {"Safe", "Behind", "Above", "Normal"},
+    Multi = false,
+    Default = "Normal",
+})
+
+FlyingModeSelection:OnChanged(function(Value)
+    print("Chế độ bay đã chọn:", Value)
+end)
+
+-- TAB 5: SKILLS
+Tabs.Skills:AddSection("USE SKILLS")
+
+-- Auto Skill Toggle
+local AutoSkillToggle = Tabs.Skills:AddToggle("AutoSkillToggle", {
+    Title = "Auto Skill",
+    Description = "Tự động sử dụng skill",
+    Default = false
+})
+
+-- Skill Selection Dropdown
+local SkillSelection = Tabs.Skills:AddDropdown("SkillSelection", {
+    Title = "Chọn Skill",
+    Description = "Chọn skill để auto",
+    Values = {"Skill E", "Skill Z", "Skill X", "Skill C", "Skill G"},
+    Multi = true,
+    Default = {"Skill E"},
+})
+
+SkillSelection:OnChanged(function(Value)
+    print("Skill đã chọn:", table.concat(Value, ", "))
+end)
+
+-- TAB 6: MISC
+Tabs.Misc:AddSection("PERFORMANCE")
+
+local NoLagMode = Tabs.Misc:AddToggle("NoLagMode", {
+    Title = "No Lag Mode",
+    Description = "Fix Lag",
+    Default = false
+})
+
+local FpsBoost = Tabs.Misc:AddToggle("FpsBoost", {
+    Title = "FPS Boost",
+    Description = "Giảm Lag Tăng Fps",
+    Default = false
+})
+
+local DarkMode = Tabs.Misc:AddToggle("DarkMode", {
+    Title = "Dark Mode",
+    Description = "Chế độ đen màn khi treo",
+    Default = false
+})
+
+local AFKMode = Tabs.Misc:AddToggle("AFKMode", {
+    Title = "AFK Safe",
+    Description = "Tự Động Rời Map Khi Có Người Chơi Trong Map",
+    Default = false
+})
+
+Tabs.Misc:AddSection("SOCIAL")
+
+Tabs.Misc:AddParagraph({
+    Title = "TikTok",
+    Content = "@Riky_Hub"
+})
+
+Tabs.Misc:AddParagraph({
+    Title = "Premium Script By Riky Hub",
+    Content = "Thanks For Use!",
+})
+
+-- Save/Load System
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+InterfaceManager:SetFolder("RizmaVNHub")
+SaveManager:SetFolder("RizmaVNHub/huntyzombie")
+InterfaceManager:BuildInterfaceSection(Tabs.Main)
+SaveManager:BuildConfigSection(Tabs.Main)
+
+-- Footer
+Tabs.Main:AddSection("INFO")
+
+Tabs.Main:AddParagraph({
+    Title = "RizmaVN Hub | Hunty Zombie v4.0",
+    Content = "Developer: " .. RizmaVNHub.Developer .. " | Discord: " .. RizmaVNHub.Discord
+})
+
+-- Floating Button
+local RizmaFloatingButton = Instance.new("ScreenGui")
+local ImageButton = Instance.new("ImageButton")
+local UICorner = Instance.new("UICorner")
+
+RizmaFloatingButton.Name = "RizmaFloatingButton"
+RizmaFloatingButton.Parent = game:GetService("CoreGui")
+RizmaFloatingButton.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+ImageButton.Parent = RizmaFloatingButton
+ImageButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+ImageButton.BorderSizePixel = 0
+ImageButton.Position = UDim2.new(0.02, 0, 0.4, 0)
+ImageButton.Size = UDim2.new(0, 60, 0, 60)
+ImageButton.Image = RizmaVNHub.ImageID
+ImageButton.Draggable = true
+
+UICorner.Parent = ImageButton
+UICorner.CornerRadius = UDim.new(0, 12)
+
+-- Button Animation
+local rotateTween = TweenService:Create(ImageButton, 
+    TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, -1), 
+    {Rotation = 360}
+)
+
+ImageButton.MouseEnter:Connect(function()
+    rotateTween:Play()
+    ImageButton.Size = UDim2.new(0, 65, 0, 65)
+end)
+
+ImageButton.MouseLeave:Connect(function()
+    rotateTween:Pause()
+    ImageButton.Rotation = 0
+    ImageButton.Size = UDim2.new(0, 60, 0, 60)
+end)
+
+ImageButton.MouseButton1Click:Connect(function()
+    RizmaWindow:Minimize()
+end)
+
+-- Select main tab
+RizmaWindow:SelectTab(1)
+
+-- Initialization
+warn("[RizmaVN Hub] Premium Activated - v4.0 by Riky VNG🎄❄️")
+print("Key verified successfully: RizmaVN2026")
+print("RizmaVN Hub | Hunty Zombie v4.0 - Ready to use!")
